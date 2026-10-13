@@ -339,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
             binding.pbGyroZ.setProgress((int) Math.max(0, Math.min(1000, sample.gyroZ + 500)));
 
             if (isVolumeModeUiActive) {
-                boolean isVertical = (Math.abs(sample.accelZ) < 0.55 && Math.hypot(sample.accelX, sample.accelY) >= 0.50);
+                boolean isVertical = service != null ? service.isVolumeVerticalPosture() : (Math.abs(sample.accelZ) < 0.55);
                 binding.txtGestureHint.setText("🔊 " + getString(isVertical ? R.string.volume_mode_hint_vertical : R.string.volume_mode_hint_flat));
             }
         });

@@ -54,9 +54,45 @@ public class TrikiForegroundService extends Service {
     private long volumeModeStartTime = 0;
     private long stillStartTime = 0;
     private long lastVolumeStepTime = 0;
-    private double gravX = 0, gravY = 0, gravZ = 1.0;
     private boolean awaitingNeutralReturn = false;
     private ImuSample lastKnownSample = null;
+
+    // Filtered Posture Tracking with Hysteresis (Flat vs On Edge / Vertical)
+    private double postureGravX = 0;
+    private double postureGravY = 0;
+    private double postureGravZ = 1.0;
+    private boolean isVerticalPosture = false;
+
+    private void updatePosture(ImuSample sample) {
+        double aMag = sample.getAccelMagnitude();
+        double gMag = sample.getGyroMagnitude();
+
+        // Only update baseline gravity when device is in a stable posture (not in a dynamic twitch)
+        if (aMag >= 0.70 && aMag <= 1.35 && gMag < 75.0) {
+            double alpha = 0.20;
+            postureGravX = (1.0 - alpha) * postureGravX + alpha * sample.accelX;
+            postureGravY = (1.0 - alpha) * postureGravY + alpha * sample.accelY;
+            postureGravZ = (1.0 - alpha) * postureGravZ + alpha * sample.accelZ;
+
+            double pMag = Math.sqrt(postureGravX * postureGravX + postureGravY * postureGravY + postureGravZ * postureGravZ) + 0.0001;
+            double normZ = Math.abs(postureGravZ) / pMag;
+            double normInPlane = Math.hypot(postureGravX, postureGravY) / pMag;
+
+            // Hysteresis Schmitt trigger:
+            // Firmly on edge / vertical: in-plane gravity dominates (normInPlane >= 0.58 && normZ <= 0.55)
+            // Firmly flat / horizontal: Z gravity dominates (normZ >= 0.65 && normInPlane <= 0.48)
+            // In the intermediate deadband, isVerticalPosture retains its current state!
+            if (normInPlane >= 0.58 && normZ <= 0.55) {
+                isVerticalPosture = true;
+            } else if (normZ >= 0.65 && normInPlane <= 0.48) {
+                isVerticalPosture = false;
+            }
+        }
+    }
+
+    public boolean isVolumeVerticalPosture() {
+        return isVerticalPosture;
+    }
 
     public void setStudioMode(boolean inStudio) {
         this.isStudioMode = inStudio;
@@ -116,6 +152,7 @@ public class TrikiForegroundService extends Service {
             @Override
             public void onSampleReceived(ImuSample sample) {
                 lastKnownSample = sample;
+                updatePosture(sample);
 
                 if (isStudioMode) {
                     if (serviceCallback != null) {
@@ -239,9 +276,13 @@ public class TrikiForegroundService extends Service {
         stillStartTime = now;
         lastVolumeStepTime = now;
         awaitingNeutralReturn = false;
+
+        if (lastKnownSample != null) {
+            updatePosture(lastKnownSample);
+        }
         vibrateDoubleTick();
 
-        Log.d(TAG, "Entered Volume Mode (Posture-Based: Flat = Down (-), On Side/Vertical = Up (+))");
+        Log.d(TAG, "Entered Volume Mode (Posture: " + (isVerticalPosture ? "ON EDGE / VERTICAL (+)" : "FLAT (-)") + ")");
 
         if (serviceCallback != null) {
             serviceCallback.onVolumeModeStateChanged(true, getString(R.string.volume_mode_hint));
@@ -271,14 +312,8 @@ public class TrikiForegroundService extends Service {
         double aMag = sample.getAccelMagnitude();
         double gMag = sample.getGyroMagnitude();
 
-        // Orientation detection:
-        // Triki lying flat (horizontal): |accelZ| is dominant (face parallel to ground), in-plane acceleration is small
-        // Triki standing on its side / vertical: in-plane acceleration (hypot(X, Y)) is dominant, |accelZ| is small
-        boolean isVertical = (Math.abs(sample.accelZ) < 0.55 && Math.hypot(sample.accelX, sample.accelY) >= 0.50);
-
-        // 2. Stillness check: hand is resting if rotation is low (< 70 deg/s) and accel is near 1.0G (0.82 .. 1.18G)
-        // Ignores tremor / noise < 0.12G
-        boolean isStill = (gMag < 70.0 && Math.abs(aMag - 1.0) < 0.18);
+        // 2. Stillness check: hand is resting if rotation is low (< 45 deg/s) and accel is near 1.0G (0.80 .. 1.20G)
+        boolean isStill = (gMag < 45.0 && Math.abs(aMag - 1.0) < 0.20);
 
         if (isStill) {
             long stillDuration = now - stillStartTime;
@@ -290,26 +325,30 @@ public class TrikiForegroundService extends Service {
             stillStartTime = now;
         }
 
-        // 3. Hysteresis / deadband return:
-        // After each volume step, require returning towards calm state or wait 500ms before next step
+        // 3. Deadband return / cooldown:
+        // After each volume step, require returning towards calm state or waiting 320ms before next step
         if (awaitingNeutralReturn) {
-            if (isStill || (now - lastVolumeStepTime >= 500)) {
+            if (isStill || (now - lastVolumeStepTime >= 320)) {
                 awaitingNeutralReturn = false;
             }
         }
 
-        // 4. Twitch / flick detection ("дёргать"):
+        // 4. Intentional Twitch / flick detection ("дёргать"):
         // Requires a deliberate, intentional shake / flick / twitch:
-        // Gyro angular velocity >= 120 deg/s OR dynamic acceleration spike >= 0.35G (|aMag - 1.0| >= 0.35)
-        boolean isTwitch = (gMag >= 120.0 || Math.abs(aMag - 1.0) >= 0.35);
+        // A) Fast rotational flick: gyro angular velocity >= 90 deg/s
+        // B) Sharp linear jerk: dynamic acceleration >= 0.45G with at least moderate rotation (>= 25 deg/s)
+        // C) Strong impact jerk: dynamic acceleration >= 0.85G
+        boolean isTwitch = (gMag >= 90.0) ||
+                           (Math.abs(aMag - 1.0) >= 0.45 && gMag >= 25.0) ||
+                           (Math.abs(aMag - 1.0) >= 0.85);
 
-        if (!awaitingNeutralReturn && isTwitch && (now - lastVolumeStepTime >= 350)) {
+        if (!awaitingNeutralReturn && isTwitch && (now - lastVolumeStepTime >= 300)) {
             lastVolumeStepTime = now;
             stillStartTime = now;
             awaitingNeutralReturn = true;
 
-            if (isVertical) {
-                // Standing vertically / on edge -> VOLUME UP (+)
+            if (isVerticalPosture) {
+                // Standing on edge / vertical -> VOLUME UP (+)
                 mediaController.volumeUp();
                 vibrateFeedback(30);
                 Log.d(TAG, "Twitch detected in VERTICAL posture -> Volume UP (+) [gMag=" + (int) gMag + ", aMag=" + String.format(java.util.Locale.US, "%.2f", aMag) + "]");
