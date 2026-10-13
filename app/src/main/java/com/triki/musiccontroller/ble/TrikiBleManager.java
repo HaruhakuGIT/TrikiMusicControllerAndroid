@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.content.Context;
@@ -35,6 +36,7 @@ public class TrikiBleManager {
     public static final UUID NUS_SERVICE_UUID = UUID.fromString("6e400001-b5a3-f393-e0a9-e50e24dcca9e");
     public static final UUID NUS_RX_CHAR_UUID = UUID.fromString("6e400002-b5a3-f393-e0a9-e50e24dcca9e"); // Write
     public static final UUID NUS_TX_CHAR_UUID = UUID.fromString("6e400003-b5a3-f393-e0a9-e50e24dcca9e"); // Notify
+    public static final UUID NUS_LED_CHAR_UUID = UUID.fromString("6e400004-b5a3-f393-e0a9-e50e24dcca9e"); // LED Write
     public static final UUID CCCD_UUID        = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
     // Standard Battery Service UUIDs
@@ -47,6 +49,12 @@ public class TrikiBleManager {
             (byte) 0x07, (byte) 0x68, (byte) 0x00, (byte) 0x03
     };
 
+    // Official Sleep Command to power down IMU and enter deep sleep
+    private static final byte[] SLEEP_COMMAND = new byte[] {
+            (byte) 0x20, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+            (byte) 0x00, (byte) 0x00, (byte) 0x00
+    };
+
     private static final double GYRO_SCALE = 131.0;
     private static final double ACCEL_SCALE = 2048.0;
 
@@ -54,7 +62,8 @@ public class TrikiBleManager {
         DISCONNECTED,
         SCANNING,
         CONNECTING,
-        CONNECTED
+        CONNECTED,
+        SLEEPING
     }
 
     public interface BleListener {
@@ -75,10 +84,12 @@ public class TrikiBleManager {
     private BluetoothGatt bluetoothGatt;
     private BluetoothGattCharacteristic rxCharacteristic;
     private BluetoothGattCharacteristic txCharacteristic;
+    private BluetoothGattCharacteristic ledCharacteristic;
     private ConnectionState state = ConnectionState.DISCONNECTED;
 
     private int lastKnownBattery = -1;
     private boolean isScanning = false;
+    private boolean isSleepWatching = false;
     private final List<Byte> packetBuffer = new ArrayList<>();
     private boolean lastButtonState = false;
 
@@ -231,6 +242,16 @@ public class TrikiBleManager {
     public synchronized void disconnect() {
         stopScan();
         stopDiscovery();
+
+        // 1. Power down Triki hardware IMU
+        if (rxCharacteristic != null && bluetoothGatt != null) {
+            try {
+                rxCharacteristic.setValue(SLEEP_COMMAND);
+                rxCharacteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                bluetoothGatt.writeCharacteristic(rxCharacteristic);
+            } catch (Exception ignored) {}
+        }
+
         if (bluetoothGatt != null) {
             try {
                 bluetoothGatt.disconnect();
@@ -241,9 +262,12 @@ public class TrikiBleManager {
         connectedDevice = null;
         rxCharacteristic = null;
         txCharacteristic = null;
+        ledCharacteristic = null;
         packetBuffer.clear();
         notifyState(ConnectionState.DISCONNECTED, "Disconnected");
     }
+
+    // End of disconnect and scan logic
 
     private void stopScan() {
         if (isScanning && bleScanner != null) {
@@ -363,6 +387,7 @@ public class TrikiBleManager {
 
             rxCharacteristic = nus.getCharacteristic(NUS_RX_CHAR_UUID);
             txCharacteristic = nus.getCharacteristic(NUS_TX_CHAR_UUID);
+            ledCharacteristic = nus.getCharacteristic(NUS_LED_CHAR_UUID);
 
             if (txCharacteristic == null || rxCharacteristic == null) {
                 Log.e(TAG, "TX or RX characteristic missing in NUS service");
@@ -468,8 +493,26 @@ public class TrikiBleManager {
             packetBuffer.add(b);
         }
 
-        while (packetBuffer.size() >= 14) {
-            if ((packetBuffer.get(0) & 0xFF) != 0x22) {
+        while (packetBuffer.size() >= 14 || (!packetBuffer.isEmpty() && (packetBuffer.get(0) & 0xFF) == 0x21)) {
+            int header = packetBuffer.get(0) & 0xFF;
+            if (header == 0x21) {
+                // Status/Acknowledge payload (5 bytes) from Triki
+                if (packetBuffer.size() >= 5) {
+                    Log.d(TAG, "Triki status/ack 0x21 received");
+                    for (int i = 0; i < 5; i++) {
+                        packetBuffer.remove(0);
+                    }
+                    continue;
+                } else {
+                    break;
+                }
+            }
+
+            if (packetBuffer.size() < 14) {
+                break;
+            }
+
+            if (header != 0x22) {
                 packetBuffer.remove(0);
                 continue;
             }

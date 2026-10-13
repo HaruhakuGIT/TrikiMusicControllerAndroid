@@ -4,6 +4,7 @@
     <string name="status_scanning">Wyszukiwanie Triki...</string>
     <string name="status_connecting">Łączenie...</string>
     <string name="status_connected">Połączono</string>
+    <string name="status_sleeping">Uśpiony (naciśnij przycisk Triki, aby wybudzić)</string>
     <string name="btn_connect">Połącz</string>
     <string name="btn_disconnect">Rozłącz</string>
     <string name="btn_stop">Zatrzymaj</string>

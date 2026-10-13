@@ -144,6 +144,9 @@ public class TrikiForegroundService extends Service {
             @Override
             public void onConnectionStateChanged(TrikiBleManager.ConnectionState state, String message) {
                 updateNotification(state);
+                if (state == TrikiBleManager.ConnectionState.CONNECTED) {
+                    vibrateFeedback(150);
+                }
                 if (serviceCallback != null) {
                     serviceCallback.onConnectionStateChanged(state, message);
                 }
@@ -472,6 +475,24 @@ public class TrikiForegroundService extends Service {
     }
 
 
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager nm = getSystemService(NotificationManager.class);
+            if (nm != null) {
+                NotificationChannel channel = new NotificationChannel(
+                        CHANNEL_ID,
+                        getString(R.string.notification_channel_name),
+                        NotificationManager.IMPORTANCE_LOW
+                );
+                channel.setDescription(getString(R.string.notification_channel_desc));
+                channel.setShowBadge(false);
+                channel.setSound(null, null);
+                channel.enableVibration(false);
+                nm.createNotificationChannel(channel);
+            }
+        }
+    }
+
     private Notification buildNotification(TrikiBleManager.ConnectionState state) {
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
@@ -497,32 +518,10 @@ public class TrikiForegroundService extends Service {
                 .setColor(0xFF00E5FF)
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setOnlyAlertOnce(true)
+                .setSilent(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .build();
-    }
-
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager nm = getSystemService(NotificationManager.class);
-            if (nm != null) {
-                try {
-                    nm.deleteNotificationChannel("triki_foreground_channel");
-                    nm.deleteNotificationChannel("triki_foreground_channel_v2");
-                    nm.deleteNotificationChannel("triki_foreground_channel_v3");
-                    nm.deleteNotificationChannel("triki_foreground_channel_v4");
-                    nm.deleteNotificationChannel("triki_foreground_channel_v5");
-                } catch (Exception ignored) {}
-
-                NotificationChannel channel = new NotificationChannel(
-                        CHANNEL_ID,
-                        getString(R.string.notification_channel_name),
-                        NotificationManager.IMPORTANCE_DEFAULT
-                );
-                channel.setDescription(getString(R.string.notification_channel_desc));
-                channel.setShowBadge(true);
-                nm.createNotificationChannel(channel);
-            }
-        }
     }
 
     @Override

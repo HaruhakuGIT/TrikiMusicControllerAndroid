@@ -151,6 +151,22 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
                 }
             }, 300);
         }
+
+        if (intent != null && intent.getBooleanExtra("TRIGGER_CONNECT", false)) {
+            binding.getRoot().postDelayed(() -> {
+                if (isBound && service != null && service.getBleManager() != null) {
+                    service.getBleManager().startScanAndConnect();
+                }
+            }, 300);
+        }
+
+        if (intent != null && intent.getBooleanExtra("TEST_DISCONNECT", false)) {
+            binding.getRoot().postDelayed(() -> {
+                if (isBound && service != null && service.getBleManager() != null) {
+                    service.getBleManager().disconnect();
+                }
+            }, 300);
+        }
     }
 
     private DeviceManagerBottomSheet deviceManagerSheet;

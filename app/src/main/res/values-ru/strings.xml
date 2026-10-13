@@ -4,6 +4,7 @@
     <string name="status_scanning">Поиск Triki...</string>
     <string name="status_connecting">Подключение...</string>
     <string name="status_connected">Подключено</string>
+    <string name="status_sleeping">Спящий режим (нажмите Triki для пробуждения)</string>
     <string name="btn_connect">Подключить</string>
     <string name="btn_disconnect">Отключить</string>
     <string name="btn_stop">Остановить</string>

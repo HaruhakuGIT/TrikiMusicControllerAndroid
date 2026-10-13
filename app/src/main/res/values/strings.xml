@@ -4,6 +4,7 @@
     <string name="status_scanning">Searching for Triki...</string>
     <string name="status_connecting">Connecting...</string>
     <string name="status_connected">Connected</string>
+    <string name="status_sleeping">Sleep mode (press Triki to wake)</string>
     <string name="btn_connect">Connect</string>
     <string name="btn_disconnect">Disconnect</string>
     <string name="btn_stop">Stop</string>
