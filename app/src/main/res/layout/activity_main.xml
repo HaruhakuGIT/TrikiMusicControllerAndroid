@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient"
@@ -12,72 +13,96 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- HEADER BAR WITH LOGO AND STATS -->
-        <LinearLayout
+        <!-- HEADER BAR WITH LOGO AND BATTERY -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:src="@mipmap/ic_launcher"
-                android:contentDescription="@string/app_name"
-                android:layout_marginEnd="10dp"/>
+            app:cardBackgroundColor="#131824"
+            app:cardCornerRadius="18dp"
+            app:strokeColor="#202838"
+            app:strokeWidth="1.2dp">
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="12dp">
 
-                <TextView
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    app:cardBackgroundColor="#0D111A"
+                    app:cardCornerRadius="22dp"
+                    app:strokeColor="#00E5FF"
+                    app:strokeWidth="1.2dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="2dp"
+                        android:src="@drawable/ic_triki_cap"
+                        android:contentDescription="@string/app_name" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txtTrainedCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="#00E5FF"
+                        android:textSize="11sp"
+                        tools:text="🧠 Wyuczone profile z PC: 2" />
+                </LinearLayout>
+
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_name"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtTrainedCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#00E5FF"
-                    android:textSize="11sp" />
+                    app:cardBackgroundColor="#1A2232"
+                    app:cardCornerRadius="14dp"
+                    app:strokeColor="#2D3A52"
+                    app:strokeWidth="1dp">
+                    <TextView
+                        android:id="@+id/txtBattery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:text="🔋 --%"
+                        android:textColor="#81D4FA"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="#1A2030"
-                app:cardCornerRadius="16dp"
-                app:strokeColor="#2A354C"
-                app:strokeWidth="1dp">
-                <TextView
-                    android:id="@+id/txtBattery"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="5dp"
-                    android:text="🔋 --%"
-                    android:textColor="#81D4FA"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
-        <!-- CONNECTION & PUSH-TO-GESTURE BANNER -->
+        <!-- HERO CONNECTION CARD -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardConnection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            app:cardBackgroundColor="#161B27"
-            app:cardCornerRadius="14dp"
-            app:strokeColor="#242C3E"
-            app:strokeWidth="1.5dp">
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="#131824"
+            app:cardCornerRadius="18dp"
+            app:strokeColor="#202838"
+            app:strokeWidth="1.2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -85,6 +110,7 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- Connection status & buttons row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -104,36 +130,48 @@
                             android:text="@string/status_disconnected"
                             android:textColor="#EF5350"
                             android:textSize="15sp"
+                            android:fontFamily="sans-serif-medium"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txtConnectedDevice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
+                            android:layout_marginTop="3dp"
                             android:textColor="#80DEEA"
                             android:textSize="11sp"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:text="Połączono z: Triki" />
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnDeviceManager"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginEnd="8dp"
+                        android:paddingHorizontal="12dp"
                         android:text="@string/device_manager_btn"
                         android:textColor="#00E5FF"
+                        android:textSize="12sp"
+                        app:icon="@drawable/ic_triki_cap"
+                        app:iconSize="20dp"
+                        app:iconTint="@null"
+                        app:iconGravity="textStart"
+                        app:iconPadding="6dp"
                         app:cornerRadius="10dp"
                         app:strokeColor="#00E5FF"
-                        app:strokeWidth="1dp" />
+                        app:strokeWidth="1.2dp" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnConnect"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
+                        android:paddingHorizontal="16dp"
                         android:text="@string/btn_connect"
                         android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
                         app:backgroundTint="#00C853"
                         app:cornerRadius="10dp" />
                 </LinearLayout>
@@ -141,68 +179,96 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginVertical="12dp"
-                    android:background="#242C3E" />
+                    android:layout_marginVertical="14dp"
+                    android:background="#1E2638" />
 
                 <!-- PUSH-TO-GESTURE STATUS PILL -->
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/bannerGestureStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="#1E2536"
-                    app:cardCornerRadius="10dp"
-                    app:strokeColor="#2E394E"
+                    app:cardBackgroundColor="#1A2131"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#2A354C"
                     app:strokeWidth="1dp">
-                    <TextView
-                        android:id="@+id/txtGestureHint"
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:padding="11dp"
-                        android:text="@string/gesture_hint_idle"
-                        android:textColor="#80DEEA"
-                        android:textSize="12sp"
-                        android:textStyle="bold" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="@string/double_click_hint"
-                    android:textColor="#607D8B"
-                    android:textSize="11sp" />
+                        <TextView
+                            android:id="@+id/txtGestureHint"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/gesture_hint_idle"
+                            android:textColor="#80DEEA"
+                            android:textSize="13sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="center"
+                            android:text="@string/double_click_hint"
+                            android:textColor="#607D8B"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- ACTION TILES -->
+        <!-- MUSIC ACTION TILES (TACTILE PADS) -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="12dp"
             android:columnCount="3">
 
             <!-- PREV -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPrev"
                 android:layout_width="0dp"
-                android:layout_height="94dp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
-                app:cardBackgroundColor="#161B27"
-                app:cardCornerRadius="12dp"
-                app:strokeColor="#242C3E"
-                app:strokeWidth="1.5dp">
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⏮" android:textSize="24sp" android:textColor="#00E5FF"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/action_prev" android:textColor="#ECEFF1" android:textSize="11sp" android:textStyle="bold" android:layout_marginTop="2dp"/>
-                    <TextView android:id="@+id/txtPrevConf" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--%" android:textColor="#546E7A" android:textSize="10sp" android:layout_marginTop="2dp"/>
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏮"
+                        android:textSize="26sp"
+                        android:textColor="#00E5FF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_prev"
+                        android:textColor="#ECEFF1"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="3dp"/>
+                    <TextView
+                        android:id="@+id/txtPrevConf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--%"
+                        android:textColor="#546E7A"
+                        android:textSize="10sp"
+                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -210,21 +276,41 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPlayPause"
                 android:layout_width="0dp"
-                android:layout_height="94dp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
-                app:cardBackgroundColor="#161B27"
-                app:cardCornerRadius="12dp"
-                app:strokeColor="#242C3E"
-                app:strokeWidth="1.5dp">
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⏯" android:textSize="24sp" android:textColor="#00E676"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/action_play_pause" android:textColor="#ECEFF1" android:textSize="11sp" android:textStyle="bold" android:layout_marginTop="2dp"/>
-                    <TextView android:id="@+id/txtPlayConf" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/double_click_badge" android:textColor="#546E7A" android:textSize="10sp" android:layout_marginTop="2dp"/>
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏯"
+                        android:textSize="26sp"
+                        android:textColor="#00E676"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_play_pause"
+                        android:textColor="#ECEFF1"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="3dp"/>
+                    <TextView
+                        android:id="@+id/txtPlayConf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/double_click_badge"
+                        android:textColor="#546E7A"
+                        android:textSize="10sp"
+                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -232,34 +318,54 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardNext"
                 android:layout_width="0dp"
-                android:layout_height="94dp"
+                android:layout_height="100dp"
                 android:layout_columnWeight="1"
                 android:layout_margin="3dp"
-                app:cardBackgroundColor="#161B27"
-                app:cardCornerRadius="12dp"
-                app:strokeColor="#242C3E"
-                app:strokeWidth="1.5dp">
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="⏭" android:textSize="24sp" android:textColor="#00E5FF"/>
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/action_next" android:textColor="#ECEFF1" android:textSize="11sp" android:textStyle="bold" android:layout_marginTop="2dp"/>
-                    <TextView android:id="@+id/txtNextConf" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="--%" android:textColor="#546E7A" android:textSize="10sp" android:layout_marginTop="2dp"/>
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏭"
+                        android:textSize="26sp"
+                        android:textColor="#00E5FF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_next"
+                        android:textColor="#ECEFF1"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="3dp"/>
+                    <TextView
+                        android:id="@+id/txtNextConf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--%"
+                        android:textColor="#546E7A"
+                        android:textSize="10sp"
+                        android:layout_marginTop="2dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </GridLayout>
 
-        <!-- LIVE SENSORS (PREMIUM GLASS-CARD) -->
+        <!-- LIVE TELEMETRY SENSORS (HUD CARD) -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            app:cardBackgroundColor="#161B27"
-            app:cardCornerRadius="14dp"
-            app:strokeColor="#242C3E"
-            app:strokeWidth="1.5dp">
+            android:layout_marginTop="12dp"
+            app:cardBackgroundColor="#131824"
+            app:cardCornerRadius="18dp"
+            app:strokeColor="#202838"
+            app:strokeWidth="1.2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -273,6 +379,7 @@
                     android:text="@string/sensors_title"
                     android:textColor="#78909C"
                     android:textSize="11sp"
+                    android:letterSpacing="0.08"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp"/>
 
@@ -280,51 +387,147 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="#1A2030"
-                    app:cardCornerRadius="10dp"
-                    app:strokeColor="#283348"
+                    app:cardBackgroundColor="#181F2D"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#263246"
                     app:strokeWidth="1dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="12dp">
+                        android:padding="14dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/accel_section" android:textColor="#00E676" android:textSize="11sp" android:textStyle="bold"/>
-                            <TextView android:id="@+id/txtTotalG" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="1.00 G" android:textColor="#00E676" android:textStyle="bold" android:textSize="13sp"/>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/accel_section"
+                                android:textColor="#00E676"
+                                android:textSize="11sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/txtTotalG"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1.00 G"
+                                android:textColor="#00E676"
+                                android:fontFamily="sans-serif-medium"
+                                android:textStyle="bold"
+                                android:textSize="14sp"/>
                         </LinearLayout>
 
                         <ProgressBar
                             android:id="@+id/pbTotalG"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="10dp"
+                            android:layout_height="7dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="12dp"
+                            android:progressDrawable="@drawable/pb_accel_track"
                             android:max="500"
                             android:progress="100"/>
 
                         <!-- Accel X, Y, Z -->
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
-                            <TextView android:layout_width="60dp" android:layout_height="wrap_content" android:text="Accel X" android:textColor="#78909C" android:textSize="11sp"/>
-                            <ProgressBar android:id="@+id/pbAccelX" style="@style/Widget.AppCompat.ProgressBar.Horizontal" android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:layout_gravity="center_vertical" android:max="600" android:progress="300"/>
-                            <TextView android:id="@+id/txtAccelX" android:layout_width="65dp" android:layout_height="wrap_content" android:text="0.00 G" android:textColor="#ECEFF1" android:textSize="11sp" android:gravity="end"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
+                            <TextView
+                                android:layout_width="65dp"
+                                android:layout_height="wrap_content"
+                                android:text="ACCEL X"
+                                android:textColor="#78909C"
+                                android:textSize="10sp"
+                                android:textStyle="bold"/>
+                            <ProgressBar
+                                android:id="@+id/pbAccelX"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="5dp"
+                                android:layout_weight="1"
+                                android:progressDrawable="@drawable/pb_accel_track"
+                                android:max="600"
+                                android:progress="300"/>
+                            <TextView
+                                android:id="@+id/txtAccelX"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="0.00 G"
+                                android:textColor="#ECEFF1"
+                                android:textSize="11sp"
+                                android:fontFamily="monospace"
+                                android:gravity="end"/>
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
-                            <TextView android:layout_width="60dp" android:layout_height="wrap_content" android:text="Accel Y" android:textColor="#78909C" android:textSize="11sp"/>
-                            <ProgressBar android:id="@+id/pbAccelY" style="@style/Widget.AppCompat.ProgressBar.Horizontal" android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:layout_gravity="center_vertical" android:max="600" android:progress="300"/>
-                            <TextView android:id="@+id/txtAccelY" android:layout_width="65dp" android:layout_height="wrap_content" android:text="0.00 G" android:textColor="#ECEFF1" android:textSize="11sp" android:gravity="end"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
+                            <TextView
+                                android:layout_width="65dp"
+                                android:layout_height="wrap_content"
+                                android:text="ACCEL Y"
+                                android:textColor="#78909C"
+                                android:textSize="10sp"
+                                android:textStyle="bold"/>
+                            <ProgressBar
+                                android:id="@+id/pbAccelY"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="5dp"
+                                android:layout_weight="1"
+                                android:progressDrawable="@drawable/pb_accel_track"
+                                android:max="600"
+                                android:progress="300"/>
+                            <TextView
+                                android:id="@+id/txtAccelY"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="0.00 G"
+                                android:textColor="#ECEFF1"
+                                android:textSize="11sp"
+                                android:fontFamily="monospace"
+                                android:gravity="end"/>
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="60dp" android:layout_height="wrap_content" android:text="Accel Z" android:textColor="#78909C" android:textSize="11sp"/>
-                            <ProgressBar android:id="@+id/pbAccelZ" style="@style/Widget.AppCompat.ProgressBar.Horizontal" android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:layout_gravity="center_vertical" android:max="600" android:progress="400"/>
-                            <TextView android:id="@+id/txtAccelZ" android:layout_width="65dp" android:layout_height="wrap_content" android:text="1.00 G" android:textColor="#ECEFF1" android:textSize="11sp" android:gravity="end"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="65dp"
+                                android:layout_height="wrap_content"
+                                android:text="ACCEL Z"
+                                android:textColor="#78909C"
+                                android:textSize="10sp"
+                                android:textStyle="bold"/>
+                            <ProgressBar
+                                android:id="@+id/pbAccelZ"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="5dp"
+                                android:layout_weight="1"
+                                android:progressDrawable="@drawable/pb_accel_track"
+                                android:max="600"
+                                android:progress="400"/>
+                            <TextView
+                                android:id="@+id/txtAccelZ"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="1.00 G"
+                                android:textColor="#ECEFF1"
+                                android:textSize="11sp"
+                                android:fontFamily="monospace"
+                                android:gravity="end"/>
                         </LinearLayout>
 
                     </LinearLayout>
@@ -334,52 +537,148 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:cardBackgroundColor="#1A2030"
-                    app:cardCornerRadius="10dp"
-                    app:strokeColor="#283348"
+                    android:layout_marginTop="12dp"
+                    app:cardBackgroundColor="#181F2D"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#263246"
                     app:strokeWidth="1dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="12dp">
+                        android:padding="14dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical">
-                            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/gyro_section" android:textColor="#00E5FF" android:textSize="11sp" android:textStyle="bold"/>
-                            <TextView android:id="@+id/txtTotalGyro" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="0 °/s" android:textColor="#00E5FF" android:textStyle="bold" android:textSize="13sp"/>
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/gyro_section"
+                                android:textColor="#00E5FF"
+                                android:textSize="11sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:id="@+id/txtTotalGyro"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 °/s"
+                                android:textColor="#00E5FF"
+                                android:fontFamily="sans-serif-medium"
+                                android:textStyle="bold"
+                                android:textSize="14sp"/>
                         </LinearLayout>
 
                         <ProgressBar
                             android:id="@+id/pbTotalGyro"
                             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_marginTop="6dp"
-                            android:layout_marginBottom="10dp"
+                            android:layout_height="7dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="12dp"
+                            android:progressDrawable="@drawable/pb_gyro_track"
                             android:max="500"
                             android:progress="0"/>
 
                         <!-- Gyro X, Y, Z -->
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
-                            <TextView android:layout_width="60dp" android:layout_height="wrap_content" android:text="Gyro X" android:textColor="#78909C" android:textSize="11sp"/>
-                            <ProgressBar android:id="@+id/pbGyroX" style="@style/Widget.AppCompat.ProgressBar.Horizontal" android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:layout_gravity="center_vertical" android:max="1000" android:progress="500"/>
-                            <TextView android:id="@+id/txtGyroX" android:layout_width="65dp" android:layout_height="wrap_content" android:text="0.0 °/s" android:textColor="#ECEFF1" android:textSize="11sp" android:gravity="end"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
+                            <TextView
+                                android:layout_width="65dp"
+                                android:layout_height="wrap_content"
+                                android:text="GYRO X"
+                                android:textColor="#78909C"
+                                android:textSize="10sp"
+                                android:textStyle="bold"/>
+                            <ProgressBar
+                                android:id="@+id/pbGyroX"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="5dp"
+                                android:layout_weight="1"
+                                android:progressDrawable="@drawable/pb_gyro_track"
+                                android:max="1000"
+                                android:progress="500"/>
+                            <TextView
+                                android:id="@+id/txtGyroX"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="0.0 °/s"
+                                android:textColor="#ECEFF1"
+                                android:textSize="11sp"
+                                android:fontFamily="monospace"
+                                android:gravity="end"/>
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="4dp">
-                            <TextView android:layout_width="60dp" android:layout_height="wrap_content" android:text="Gyro Y" android:textColor="#78909C" android:textSize="11sp"/>
-                            <ProgressBar android:id="@+id/pbGyroY" style="@style/Widget.AppCompat.ProgressBar.Horizontal" android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:layout_gravity="center_vertical" android:max="1000" android:progress="500"/>
-                            <TextView android:id="@+id/txtGyroY" android:layout_width="65dp" android:layout_height="wrap_content" android:text="0.0 °/s" android:textColor="#ECEFF1" android:textSize="11sp" android:gravity="end"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="6dp">
+                            <TextView
+                                android:layout_width="65dp"
+                                android:layout_height="wrap_content"
+                                android:text="GYRO Y"
+                                android:textColor="#78909C"
+                                android:textSize="10sp"
+                                android:textStyle="bold"/>
+                            <ProgressBar
+                                android:id="@+id/pbGyroY"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="5dp"
+                                android:layout_weight="1"
+                                android:progressDrawable="@drawable/pb_gyro_track"
+                                android:max="1000"
+                                android:progress="500"/>
+                            <TextView
+                                android:id="@+id/txtGyroY"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="0.0 °/s"
+                                android:textColor="#ECEFF1"
+                                android:textSize="11sp"
+                                android:fontFamily="monospace"
+                                android:gravity="end"/>
                         </LinearLayout>
 
-                        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                            <TextView android:layout_width="60dp" android:layout_height="wrap_content" android:text="Gyro Z" android:textColor="#78909C" android:textSize="11sp"/>
-                            <ProgressBar android:id="@+id/pbGyroZ" style="@style/Widget.AppCompat.ProgressBar.Horizontal" android:layout_width="0dp" android:layout_height="4dp" android:layout_weight="1" android:layout_gravity="center_vertical" android:max="1000" android:progress="500"/>
-                            <TextView android:id="@+id/txtGyroZ" android:layout_width="65dp" android:layout_height="wrap_content" android:text="0.0 °/s" android:textColor="#ECEFF1" android:textSize="11sp" android:gravity="end"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+                            <TextView
+                                android:layout_width="65dp"
+                                android:layout_height="wrap_content"
+                                android:text="GYRO Z"
+                                android:textColor="#78909C"
+                                android:textSize="10sp"
+                                android:textStyle="bold"/>
+                            <ProgressBar
+                                android:id="@+id/pbGyroZ"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="0dp"
+                                android:layout_height="5dp"
+                                android:layout_weight="1"
+                                android:progressDrawable="@drawable/pb_gyro_track"
+                                android:max="1000"
+                                android:progress="500"/>
+                            <TextView
+                                android:id="@+id/txtGyroZ"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:text="0.0 °/s"
+                                android:textColor="#ECEFF1"
+                                android:textSize="11sp"
+                                android:fontFamily="monospace"
+                                android:gravity="end"/>
                         </LinearLayout>
 
                     </LinearLayout>
@@ -389,28 +688,36 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:cardBackgroundColor="#1A2030"
-                    app:cardCornerRadius="10dp"
-                    app:strokeColor="#283348"
+                    android:layout_marginTop="12dp"
+                    app:cardBackgroundColor="#181F2D"
+                    app:cardCornerRadius="12dp"
+                    app:strokeColor="#263246"
                     app:strokeWidth="1dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:padding="12dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/button_section" android:textColor="#78909C" android:textSize="11sp" android:textStyle="bold"/>
+                        android:padding="14dp">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/button_section"
+                            android:textColor="#78909C"
+                            android:textSize="11sp"
+                            android:textStyle="bold"/>
                         <TextView
                             android:id="@+id/txtButtonStateBadge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="#2E394E"
-                            android:paddingHorizontal="14dp"
-                            android:paddingVertical="5dp"
+                            android:background="@drawable/bg_button_released"
+                            android:paddingHorizontal="16dp"
+                            android:paddingVertical="6dp"
                             android:text="@string/button_state_released"
                             android:textColor="#ECEFF1"
                             android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"
                             android:textStyle="bold"/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>

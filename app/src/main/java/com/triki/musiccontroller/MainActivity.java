@@ -281,18 +281,20 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
         runOnUiThread(() -> {
             if (isPressed) {
                 binding.txtButtonStateBadge.setText(R.string.button_state_held);
-                binding.txtButtonStateBadge.setBackgroundColor(Color.parseColor("#00E5FF"));
+                binding.txtButtonStateBadge.setBackgroundResource(R.drawable.bg_button_held);
                 binding.txtButtonStateBadge.setTextColor(Color.BLACK);
 
+                binding.bannerGestureStatus.setStrokeColor(Color.parseColor("#00E676"));
                 binding.txtGestureHint.setText("🟢 " + getString(R.string.gesture_hint_listening));
                 binding.txtGestureHint.setTextColor(Color.parseColor("#00E676"));
             } else {
                 binding.txtButtonStateBadge.setText(R.string.button_state_released);
-                binding.txtButtonStateBadge.setBackgroundColor(Color.parseColor("#2A3142"));
+                binding.txtButtonStateBadge.setBackgroundResource(R.drawable.bg_button_released);
                 binding.txtButtonStateBadge.setTextColor(Color.parseColor("#ECEFF1"));
 
+                binding.bannerGestureStatus.setStrokeColor(Color.parseColor("#2A354C"));
                 binding.txtGestureHint.setText("⚪ " + getString(R.string.gesture_hint_idle));
-                binding.txtGestureHint.setTextColor(Color.parseColor("#00E5FF"));
+                binding.txtGestureHint.setTextColor(Color.parseColor("#80DEEA"));
             }
         });
     }
