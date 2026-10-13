@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.TrikiMusicController" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">#00E5FF</item>
+        <item name="android:statusBarColor">#0F1117</item>
+        <item name="android:navigationBarColor">#0F1117</item>
+        <item name="android:windowBackground">#0F1117</item>
+    </style>
+</resources>

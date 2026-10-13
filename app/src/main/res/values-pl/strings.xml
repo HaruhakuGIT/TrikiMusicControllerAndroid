@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Kontroler Triki</string>
+    <string name="status_disconnected">Rozłączono</string>
+    <string name="status_scanning">Wyszukiwanie Triki...</string>
+    <string name="status_connecting">Łączenie...</string>
+    <string name="status_connected">Połączono</string>
+    <string name="btn_connect">Połącz</string>
+    <string name="btn_disconnect">Rozłącz</string>
+    <string name="btn_stop">Zatrzymaj</string>
+
+    <string name="action_play_pause">Pauza / Odtwórz</string>
+    <string name="action_next">Następny</string>
+    <string name="action_prev">Poprzedni</string>
+    <string name="action_vol_up">Głośniej (+)</string>
+    <string name="action_vol_down">Ciszej (-)</string>
+
+    <string name="gesture_hint_idle">Przytrzymaj przycisk Triki, aby wykonać gest</string>
+    <string name="gesture_hint_listening">Przycisk przytrzymany: wykonaj gest!</string>
+
+    <string name="button_state_released">ZWOLNIONY</string>
+    <string name="button_state_held">PRZYTRZYMANY (NASŁUCHIWANIE)</string>
+
+    <string name="double_click_hint">2 kliknięcia przycisku = Pauza / Odtwórz</string>
+    <string name="double_click_badge">2 kliknięcia</string>
+    <string name="sensors_title">CZUJNIKI W CZASIE RZECZYWISTYM</string>
+    <string name="accel_section">AKCELEROMETR (PRZYSPIESZENIE &amp; POCHYLENIE)</string>
+    <string name="gyro_section">ŻYROSKOP (PRĘDKOŚĆ OBROTOWA)</string>
+    <string name="button_section">FIZYCZNY PRZYCISK (PAKIET 0x22)</string>
+    <string name="trained_models">🧠 Wyuczone profile z PC: %1$d</string>
+
+    <string name="notification_title">Kontroler Muzyki Triki</string>
+    <string name="notification_text">Usługa działa w tle</string>
+    <string name="notification_channel_name">Usługa w tle Triki</string>
+    <string name="notification_channel_desc">Nasłuchiwanie BLE i gestów pierścienia Triki w tle</string>
+    <string name="gyro_unit">°/s</string>
+    <string name="permission_required">Do połączenia z pierścieniem Triki wymagane są uprawnienia Bluetooth.</string>
+</resources>

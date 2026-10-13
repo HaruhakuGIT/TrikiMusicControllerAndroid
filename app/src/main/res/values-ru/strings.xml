@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Triki Контроллер</string>
+    <string name="status_disconnected">Отключено</string>
+    <string name="status_scanning">Поиск Triki...</string>
+    <string name="status_connecting">Подключение...</string>
+    <string name="status_connected">Подключено</string>
+    <string name="btn_connect">Подключить</string>
+    <string name="btn_disconnect">Отключить</string>
+    <string name="btn_stop">Остановить</string>
+
+    <string name="action_play_pause">Пауза / Плей</string>
+    <string name="action_next">Вперёд</string>
+    <string name="action_prev">Назад</string>
+    <string name="action_vol_up">Громче (+)</string>
+    <string name="action_vol_down">Тише (-)</string>
+
+    <string name="gesture_hint_idle">Зажмите кнопку Triki для выполнения жеста</string>
+    <string name="gesture_hint_listening">Кнопка зажата: делайте жест!</string>
+
+    <string name="button_state_released">ОТПУЩЕНА</string>
+    <string name="button_state_held">ЗАЖАТА (СЛУШАЮ ЖЕСТ)</string>
+
+    <string name="double_click_hint">2 нажатия кнопки = Пауза / Плей</string>
+    <string name="double_click_badge">2 клика</string>
+    <string name="sensors_title">ПОКАЗАТЕЛИ ДАТЧИКОВ В РЕАЛЬНОМ ВРЕМЕНИ</string>
+    <string name="accel_section">АКСЕЛЕРОМЕТР (УСКОРЕНИЕ &amp; НАКЛОН)</string>
+    <string name="gyro_section">ГИРОСКОП (СКОРОСТЬ ВРАЩЕНИЯ)</string>
+    <string name="button_section">ФИЗИЧЕСКАЯ КНОПКА (ПАКЕТ 0x22)</string>
+    <string name="trained_models">🧠 Обучено жестов с ПК: %1$d</string>
+
+    <string name="notification_title">Triki Контроллер Музыки</string>
+    <string name="notification_text">Служба работает в фоне</string>
+    <string name="notification_channel_name">Фоновая служба Triki</string>
+    <string name="notification_channel_desc">Фоновое отслеживание BLE и жестов кольца Triki</string>
+    <string name="gyro_unit">°/с</string>
+    <string name="permission_required">Для связи с кольцом Triki необходимы разрешения Bluetooth.</string>
+</resources>

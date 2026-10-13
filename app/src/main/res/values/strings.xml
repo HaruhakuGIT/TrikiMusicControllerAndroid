@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Triki Controller</string>
+    <string name="status_disconnected">Disconnected</string>
+    <string name="status_scanning">Searching for Triki...</string>
+    <string name="status_connecting">Connecting...</string>
+    <string name="status_connected">Connected</string>
+    <string name="btn_connect">Connect</string>
+    <string name="btn_disconnect">Disconnect</string>
+    <string name="btn_stop">Stop</string>
+
+    <string name="action_play_pause">Play / Pause</string>
+    <string name="action_next">Next Track</string>
+    <string name="action_prev">Previous Track</string>
+    <string name="action_vol_up">Volume Up (+)</string>
+    <string name="action_vol_down">Volume Down (-)</string>
+
+    <string name="gesture_hint_idle">Hold Triki button to perform a gesture</string>
+    <string name="gesture_hint_listening">Button held: make your gesture!</string>
+
+    <string name="button_state_released">RELEASED</string>
+    <string name="button_state_held">HELD (LISTENING)</string>
+
+    <string name="double_click_hint">Double-click button = Play / Pause</string>
+    <string name="double_click_badge">Double tap</string>
+    <string name="sensors_title">REAL-TIME SENSORS</string>
+    <string name="accel_section">ACCELEROMETER (G &amp; TILT)</string>
+    <string name="gyro_section">GYROSCOPE (ROTATION SPEED)</string>
+    <string name="button_section">PHYSICAL BUTTON (PACKET 0x22)</string>
+    <string name="trained_models">🧠 Trained Profiles: %1$d</string>
+
+    <string name="notification_title">Triki Music Controller</string>
+    <string name="notification_text">Background service is active</string>
+    <string name="notification_channel_name">Triki Background Service</string>
+    <string name="notification_channel_desc">Background BLE and gesture listener for Triki ring</string>
+    <string name="gyro_unit">°/s</string>
+    <string name="permission_required">Bluetooth permissions are required to connect to Triki ring.</string>
+</resources>
