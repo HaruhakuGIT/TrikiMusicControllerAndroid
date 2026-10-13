@@ -50,12 +50,24 @@ public class TrikiForegroundService extends Service {
 
     // VOLUME MODE STATE (Triple Click Activated)
     private boolean isVolumeModeActive = false;
+    private boolean isStudioMode = false;
     private long volumeModeStartTime = 0;
     private long stillStartTime = 0;
     private long lastVolumeStepTime = 0;
     private double gravX = 0, gravY = 0, gravZ = 1.0;
     private boolean awaitingNeutralReturn = false;
     private ImuSample lastKnownSample = null;
+
+    public void setStudioMode(boolean inStudio) {
+        this.isStudioMode = inStudio;
+        if (inStudio) {
+            isVolumeModeActive = false;
+        }
+    }
+
+    public boolean isStudioMode() {
+        return isStudioMode;
+    }
 
     public interface ServiceCallback {
         void onConnectionStateChanged(TrikiBleManager.ConnectionState state, String message);
@@ -105,6 +117,13 @@ public class TrikiForegroundService extends Service {
             public void onSampleReceived(ImuSample sample) {
                 lastKnownSample = sample;
 
+                if (isStudioMode) {
+                    if (serviceCallback != null) {
+                        serviceCallback.onSampleReceived(sample);
+                    }
+                    return;
+                }
+
                 if (isVolumeModeActive) {
                     processVolumeMotion(sample);
                 } else if (isButtonPressed) {
@@ -119,9 +138,6 @@ public class TrikiForegroundService extends Service {
             @Override
             public void onButtonStateChanged(boolean isPressed) {
                 handleButtonState(isPressed);
-                if (serviceCallback != null) {
-                    serviceCallback.onButtonStateChanged(isPressed);
-                }
             }
 
             @Override
@@ -142,6 +158,20 @@ public class TrikiForegroundService extends Service {
 
     private void handleButtonState(boolean isPressed) {
         this.isButtonPressed = isPressed;
+
+        if (isStudioMode) {
+            if (isPressed) {
+                vibrateFeedback(40);
+            }
+            if (serviceCallback != null) {
+                serviceCallback.onButtonStateChanged(isPressed);
+            }
+            return;
+        }
+
+        if (serviceCallback != null) {
+            serviceCallback.onButtonStateChanged(isPressed);
+        }
 
         if (isPressed) {
             buttonPressTime = System.currentTimeMillis();

@@ -158,10 +158,16 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
 
     private void showGestureStudio() {
         if (service == null) return;
+        service.setStudioMode(true);
         gestureStudioSheet = new GestureStudioBottomSheet(this, service.getGestureEngine(), service.getBleManager(),
                 (totalGestures, trainedActions) -> {
                     binding.txtTrainedCount.setText(getString(R.string.trained_models, trainedActions));
                 });
+        gestureStudioSheet.setOnDismissCallback(() -> {
+            if (service != null) {
+                service.setStudioMode(false);
+            }
+        });
         gestureStudioSheet.show();
     }
 
@@ -342,6 +348,13 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
     @Override
     public void onButtonStateChanged(boolean isPressed) {
         runOnUiThread(() -> {
+            if (gestureStudioSheet != null && gestureStudioSheet.isShowing()) {
+                if (isPressed) {
+                    gestureStudioSheet.onTrikiButtonClicked();
+                }
+                return;
+            }
+
             if (isPressed) {
                 binding.txtButtonStateBadge.setText(R.string.button_state_held);
                 binding.txtButtonStateBadge.setBackgroundResource(R.drawable.bg_button_held);

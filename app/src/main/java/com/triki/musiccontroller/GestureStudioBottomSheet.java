@@ -80,6 +80,29 @@ public class GestureStudioBottomSheet {
         this.modelChangedListener = listener;
     }
 
+    public interface OnDismissCallback {
+        void onDismiss();
+    }
+    private OnDismissCallback dismissCallback;
+
+    public void setOnDismissCallback(OnDismissCallback callback) {
+        this.dismissCallback = callback;
+    }
+
+    public boolean isShowing() {
+        return dialog != null && dialog.isShowing();
+    }
+
+    public void onTrikiButtonClicked() {
+        handler.post(() -> {
+            if (currentState == StudioState.IDLE) {
+                startCountdown();
+            } else {
+                stopSessionIfRunning();
+            }
+        });
+    }
+
     public void show() {
         dialog = new BottomSheetDialog(context);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_gesture_studio, null);
@@ -99,7 +122,12 @@ public class GestureStudioBottomSheet {
         initViews(view);
         loadGesturesList();
 
-        dialog.setOnDismissListener(d -> stopSessionIfRunning());
+        dialog.setOnDismissListener(d -> {
+            stopSessionIfRunning();
+            if (dismissCallback != null) {
+                dismissCallback.onDismiss();
+            }
+        });
         dialog.show();
     }
 
