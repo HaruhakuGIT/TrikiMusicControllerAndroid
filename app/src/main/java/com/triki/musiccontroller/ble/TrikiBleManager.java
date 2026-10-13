@@ -62,10 +62,12 @@ public class TrikiBleManager {
         void onSampleReceived(ImuSample sample);
         void onButtonStateChanged(boolean isPressed);
         void onBatteryReceived(int percent);
+        void onDiscoveredDevice(BluetoothDevice device, int rssi);
     }
 
     private final Context context;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final DevicePreferences preferences;
     private BleListener listener;
 
     private BluetoothAdapter bluetoothAdapter;
@@ -80,9 +82,17 @@ public class TrikiBleManager {
     private final List<Byte> packetBuffer = new ArrayList<>();
     private boolean lastButtonState = false;
 
+    private String targetMacAddress = null; // Specific device to connect to, or null for auto
+    private BluetoothDevice connectedDevice = null;
+
     public TrikiBleManager(Context context) {
         this.context = context.getApplicationContext();
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        this.preferences = new DevicePreferences(this.context);
+    }
+
+    public DevicePreferences getPreferences() {
+        return preferences;
     }
 
     public void setListener(BleListener listener) {
@@ -100,11 +110,33 @@ public class TrikiBleManager {
         return lastKnownBattery;
     }
 
+    public BluetoothDevice getConnectedDevice() {
+        return connectedDevice;
+    }
+
+    public String getConnectedDeviceName() {
+        if (connectedDevice == null) return null;
+        String mac = connectedDevice.getAddress();
+        for (com.triki.musiccontroller.model.SavedDevice d : preferences.getSavedDevices()) {
+            if (mac.equalsIgnoreCase(d.getMacAddress())) {
+                return d.getCustomName();
+            }
+        }
+        String name = connectedDevice.getName();
+        return name != null ? name : "Triki";
+    }
+
     public synchronized void startScanAndConnect() {
+        startScanAndConnect(null);
+    }
+
+    public synchronized void startScanAndConnect(String specificMac) {
         if (state == ConnectionState.CONNECTED || state == ConnectionState.CONNECTING) {
             disconnect();
             return;
         }
+
+        this.targetMacAddress = specificMac;
 
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             notifyState(ConnectionState.DISCONNECTED, "Bluetooth is disabled");
@@ -137,8 +169,68 @@ public class TrikiBleManager {
         }, 15000);
     }
 
+    public synchronized void startDiscoveryOnly() {
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) return;
+        bleScanner = bluetoothAdapter.getBluetoothLeScanner();
+        if (bleScanner == null) return;
+
+        isScanning = true;
+        ScanSettings settings = new ScanSettings.Builder()
+                .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+                .build();
+
+        bleScanner.startScan(null, settings, discoveryCallback);
+
+        mainHandler.postDelayed(() -> {
+            if (isScanning) {
+                try {
+                    bleScanner.stopScan(discoveryCallback);
+                } catch (Exception ignored) {}
+                isScanning = false;
+            }
+        }, 12000);
+    }
+
+    public synchronized void stopDiscovery() {
+        if (isScanning && bleScanner != null) {
+            try {
+                bleScanner.stopScan(discoveryCallback);
+            } catch (Exception ignored) {}
+            isScanning = false;
+        }
+    }
+
+    public synchronized void connectDirect(String macAddress) {
+        if (macAddress == null) return;
+        stopScan();
+        stopDiscovery();
+
+        if (state == ConnectionState.CONNECTED || state == ConnectionState.CONNECTING) {
+            disconnect();
+        }
+
+        if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+            notifyState(ConnectionState.DISCONNECTED, "Bluetooth is disabled");
+            return;
+        }
+
+        try {
+            BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
+            if (device != null) {
+                connectToDevice(device);
+                return;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to get remote device: " + macAddress, e);
+        }
+
+        // Fallback: scan for this MAC
+        startScanAndConnect(macAddress);
+    }
+
     public synchronized void disconnect() {
         stopScan();
+        stopDiscovery();
         if (bluetoothGatt != null) {
             try {
                 bluetoothGatt.disconnect();
@@ -146,6 +238,7 @@ public class TrikiBleManager {
             } catch (Exception ignored) {}
             bluetoothGatt = null;
         }
+        connectedDevice = null;
         rxCharacteristic = null;
         txCharacteristic = null;
         packetBuffer.clear();
@@ -161,22 +254,70 @@ public class TrikiBleManager {
         }
     }
 
+    private final ScanCallback discoveryCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+            BluetoothDevice device = result.getDevice();
+            String name = device.getName();
+            if (isTrikiDevice(name)) {
+                if (listener != null) {
+                    mainHandler.post(() -> listener.onDiscoveredDevice(device, result.getRssi()));
+                }
+            }
+        }
+    };
+
     private final ScanCallback scanCallback = new ScanCallback() {
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             BluetoothDevice device = result.getDevice();
             String name = device.getName();
+            String mac = device.getAddress();
 
-            if (name != null && (name.contains("Triki") || name.contains("triki") || name.contains("Velto"))) {
-                Log.d(TAG, "Found target device: " + name + " [" + device.getAddress() + "]");
-                stopScan();
-                connectToDevice(device);
+            if (listener != null && isTrikiDevice(name)) {
+                mainHandler.post(() -> listener.onDiscoveredDevice(device, result.getRssi()));
             }
+
+            if (!isTrikiDevice(name)) return;
+
+            // Scenario 1: A specific device was requested by user
+            if (targetMacAddress != null) {
+                if (targetMacAddress.equalsIgnoreCase(mac)) {
+                    Log.d(TAG, "Found target specified device: " + name + " [" + mac + "]");
+                    stopScan();
+                    connectToDevice(device);
+                }
+                return;
+            }
+
+            // Scenario 2: Check auto-connect list
+            List<String> autoConnectMacs = preferences.getAutoConnectMacs();
+            if (!autoConnectMacs.isEmpty()) {
+                if (autoConnectMacs.contains(mac.toUpperCase())) {
+                    Log.d(TAG, "Found auto-connect permitted device: " + name + " [" + mac + "]");
+                    stopScan();
+                    connectToDevice(device);
+                }
+                return;
+            }
+
+            // Scenario 3: If no devices have auto-connect configured, connect to first Triki
+            Log.d(TAG, "Connecting to first detected Triki: " + name + " [" + mac + "]");
+            stopScan();
+            connectToDevice(device);
         }
     };
 
+    private boolean isTrikiDevice(String name) {
+        if (name == null) return false;
+        String lower = name.toLowerCase();
+        return lower.contains("triki") || lower.contains("velto");
+    }
+
     private void connectToDevice(BluetoothDevice device) {
-        notifyState(ConnectionState.CONNECTING, "Connecting to " + device.getName() + "...");
+        connectedDevice = device;
+        String devName = device.getName() != null ? device.getName() : "Triki";
+        notifyState(ConnectionState.CONNECTING, "Connecting to " + devName + "...");
         bluetoothGatt = device.connectGatt(context, false, gattCallback, BluetoothDevice.TRANSPORT_LE);
     }
 
@@ -195,6 +336,7 @@ public class TrikiBleManager {
                 }, 300);
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.d(TAG, "GATT disconnected");
+                connectedDevice = null;
                 notifyState(ConnectionState.DISCONNECTED, "Disconnected");
                 if (bluetoothGatt != null) {
                     bluetoothGatt.close();
@@ -293,6 +435,12 @@ public class TrikiBleManager {
                         boolean writeOk = bluetoothGatt.writeCharacteristic(rxCharacteristic);
                         Log.d(TAG, "START_COMMAND written to RX: " + writeOk);
 
+                        // Save device connection in preferences
+                        BluetoothDevice dev = bluetoothGatt.getDevice();
+                        if (dev != null) {
+                            preferences.recordDeviceConnection(dev.getAddress(), dev.getName());
+                        }
+
                         notifyState(ConnectionState.CONNECTED, "Connected to Triki!");
                     }
                 }, 500);
@@ -320,73 +468,50 @@ public class TrikiBleManager {
             packetBuffer.add(b);
         }
 
-        // FrameParser logic (same as PC FrameParser):
-        // Each Triki packet starts with 0x22 and has length 14 bytes
-        final int FRAME_LENGTH = 14;
-
-        while (true) {
-            int headerIndex = -1;
-            for (int i = 0; i < packetBuffer.size() - 1; i++) {
-                if (packetBuffer.get(i) == (byte) 0x22) {
-                    headerIndex = i;
-                    break;
-                }
+        while (packetBuffer.size() >= 14) {
+            if ((packetBuffer.get(0) & 0xFF) != 0x22) {
+                packetBuffer.remove(0);
+                continue;
             }
 
-            if (headerIndex < 0) {
-                if (!packetBuffer.isEmpty()) {
-                    boolean keepTrailing = packetBuffer.get(packetBuffer.size() - 1) == (byte) 0x22;
-                    packetBuffer.clear();
-                    if (keepTrailing) packetBuffer.add((byte) 0x22);
-                }
-                break;
-            }
-
-            if (headerIndex > 0) {
-                packetBuffer.subList(0, headerIndex).clear();
-            }
-
-            if (packetBuffer.size() < FRAME_LENGTH) {
-                break;
-            }
-
-            byte[] frame = new byte[FRAME_LENGTH];
-            for (int i = 0; i < FRAME_LENGTH; i++) {
-                frame[i] = packetBuffer.get(i);
-            }
-            packetBuffer.subList(0, FRAME_LENGTH).clear();
-
-            // Byte 1: Button Status (0 = released, 1 = pressed)
-            boolean isPressed = frame[1] != 0;
+            boolean isPressed = packetBuffer.get(1) != 0;
             if (isPressed != lastButtonState) {
                 lastButtonState = isPressed;
                 if (listener != null) {
-                    final boolean pressed = isPressed;
-                    mainHandler.post(() -> listener.onButtonStateChanged(pressed));
+                    mainHandler.post(() -> listener.onButtonStateChanged(isPressed));
                 }
             }
 
-            // Bytes 2..13: Int16 Little Endian (GyroX, GyroY, GyroZ, AccelX, AccelY, AccelZ)
-            ByteBuffer buf = ByteBuffer.wrap(frame).order(ByteOrder.LITTLE_ENDIAN);
-            short rawGx = buf.getShort(2);
-            short rawGy = buf.getShort(4);
-            short rawGz = buf.getShort(6);
-            short rawAx = buf.getShort(8);
-            short rawAy = buf.getShort(10);
-            short rawAz = buf.getShort(12);
+            short ax = readShortLE(packetBuffer.get(2), packetBuffer.get(3));
+            short ay = readShortLE(packetBuffer.get(4), packetBuffer.get(5));
+            short az = readShortLE(packetBuffer.get(6), packetBuffer.get(7));
 
-            float gx = (float) (rawGx / GYRO_SCALE);
-            float gy = (float) (rawGy / GYRO_SCALE);
-            float gz = (float) (rawGz / GYRO_SCALE);
-            float ax = (float) (rawAx / ACCEL_SCALE);
-            float ay = (float) (rawAy / ACCEL_SCALE);
-            float az = (float) (rawAz / ACCEL_SCALE);
+            short gx = readShortLE(packetBuffer.get(8), packetBuffer.get(9));
+            short gy = readShortLE(packetBuffer.get(10), packetBuffer.get(11));
+            short gz = readShortLE(packetBuffer.get(12), packetBuffer.get(13));
 
-            ImuSample sample = new ImuSample(System.currentTimeMillis(), ax, ay, az, gx, gy, gz);
+            float accelX = (float) (ax / ACCEL_SCALE);
+            float accelY = (float) (ay / ACCEL_SCALE);
+            float accelZ = (float) (az / ACCEL_SCALE);
+
+            float gyroX = (float) (gx / GYRO_SCALE);
+            float gyroY = (float) (gy / GYRO_SCALE);
+            float gyroZ = (float) (gz / GYRO_SCALE);
+
+            ImuSample sample = new ImuSample(System.currentTimeMillis(), accelX, accelY, accelZ, gyroX, gyroY, gyroZ);
+
             if (listener != null) {
                 mainHandler.post(() -> listener.onSampleReceived(sample));
             }
+
+            for (int i = 0; i < 14; i++) {
+                packetBuffer.remove(0);
+            }
         }
+    }
+
+    private short readShortLE(byte b1, byte b2) {
+        return (short) ((b1 & 0xFF) | ((b2 & 0xFF) << 8));
     }
 
     private void notifyState(ConnectionState newState, String message) {

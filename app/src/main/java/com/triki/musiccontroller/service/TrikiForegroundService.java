@@ -54,6 +54,7 @@ public class TrikiForegroundService extends Service {
         void onButtonStateChanged(boolean isPressed);
         void onGestureRecognized(MusicAction action, String name, float confidence);
         void onBatteryReceived(int percent);
+        void onDiscoveredDevice(android.bluetooth.BluetoothDevice device, int rssi);
     }
 
     private ServiceCallback serviceCallback;
@@ -111,6 +112,13 @@ public class TrikiForegroundService extends Service {
             public void onBatteryReceived(int percent) {
                 if (serviceCallback != null) {
                     serviceCallback.onBatteryReceived(percent);
+                }
+            }
+
+            @Override
+            public void onDiscoveredDevice(android.bluetooth.BluetoothDevice device, int rssi) {
+                if (serviceCallback != null) {
+                    serviceCallback.onDiscoveredDevice(device, rssi);
                 }
             }
         });

@@ -34,4 +34,21 @@
     <string name="notification_channel_desc">Nasłuchiwanie BLE i gestów pierścienia Triki w tle</string>
     <string name="gyro_unit">°/s</string>
     <string name="permission_required">Do połączenia z pierścieniem Triki wymagane są uprawnienia Bluetooth.</string>
+
+    <!-- Menedżer urządzeń -->
+    <string name="device_manager_title">Menedżer urządzeń Triki</string>
+    <string name="device_manager_btn">Moje Triki</string>
+    <string name="device_manager_history">Zapamiętane urządzenia Triki</string>
+    <string name="device_manager_available">Dostępne w pobliżu</string>
+    <string name="device_auto_connect">Połącz automatycznie</string>
+    <string name="device_active">Połączono</string>
+    <string name="device_connect_btn">Połącz</string>
+    <string name="device_disconnect_btn">Rozłącz</string>
+    <string name="device_rename">Zmień nazwę</string>
+    <string name="device_forget">Zapomnij</string>
+    <string name="device_scan">Skanuj</string>
+    <string name="device_scanning">Szukanie Triki...</string>
+    <string name="no_saved_devices">Brak zapamiętanych urządzeń.\nKliknij «Skanuj», aby znaleźć Twoje Triki.</string>
+    <string name="device_connected_prefix">Połączono z: %1$s</string>
+    <string name="btn_close">Zamknij</string>
 </resources>

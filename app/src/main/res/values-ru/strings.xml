@@ -34,4 +34,21 @@
     <string name="notification_channel_desc">Фоновое отслеживание BLE и жестов кольца Triki</string>
     <string name="gyro_unit">°/с</string>
     <string name="permission_required">Для связи с кольцом Triki необходимы разрешения Bluetooth.</string>
+
+    <!-- Менеджер устройств -->
+    <string name="device_manager_title">Менеджер устройств Triki</string>
+    <string name="device_manager_btn">Мои Triki</string>
+    <string name="device_manager_history">Сохранённые устройства Triki</string>
+    <string name="device_manager_available">Доступные устройства рядом</string>
+    <string name="device_auto_connect">Автоподключение</string>
+    <string name="device_active">Подключено</string>
+    <string name="device_connect_btn">Подключить</string>
+    <string name="device_disconnect_btn">Отключить</string>
+    <string name="device_rename">Переименовать</string>
+    <string name="device_forget">Забыть</string>
+    <string name="device_scan">Поиск</string>
+    <string name="device_scanning">Ищу Triki...</string>
+    <string name="no_saved_devices">Нет сохранённых устройств.\nНажмите «Поиск», чтобы найти ваши Triki.</string>
+    <string name="device_connected_prefix">Подключено: %1$s</string>
+    <string name="btn_close">Закрыть</string>
 </resources>

@@ -34,4 +34,21 @@
     <string name="notification_channel_desc">Background BLE and gesture listener for Triki ring</string>
     <string name="gyro_unit">°/s</string>
     <string name="permission_required">Bluetooth permissions are required to connect to Triki ring.</string>
+
+    <!-- Device Manager -->
+    <string name="device_manager_title">Triki Device Manager</string>
+    <string name="device_manager_btn">Manage Devices</string>
+    <string name="device_manager_history">Known Triki Devices</string>
+    <string name="device_manager_available">Available Nearby Triki</string>
+    <string name="device_auto_connect">Auto-connect</string>
+    <string name="device_active">Connected</string>
+    <string name="device_connect_btn">Connect</string>
+    <string name="device_disconnect_btn">Disconnect</string>
+    <string name="device_rename">Rename</string>
+    <string name="device_forget">Forget</string>
+    <string name="device_scan">Scan</string>
+    <string name="device_scanning">Scanning...</string>
+    <string name="no_saved_devices">No saved Triki devices yet.\nClick Scan to find your Triki.</string>
+    <string name="device_connected_prefix">Connected to: %1$s</string>
+    <string name="btn_close">Close</string>
 </resources>

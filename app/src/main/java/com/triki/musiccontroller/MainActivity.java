@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -89,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
 
         binding.txtTrainedCount.setText(getString(R.string.trained_models, 2));
 
+        binding.btnDeviceManager.setOnClickListener(v -> {
+            if (isBound && service != null) {
+                showDeviceManager();
+            } else {
+                checkPermissionsAndStart();
+            }
+        });
+
         binding.btnConnect.setOnClickListener(v -> {
             if (isBound && service != null) {
                 service.toggleConnect();
@@ -98,6 +107,42 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
         });
 
         checkPermissionsAndStart();
+    }
+
+    private DeviceManagerBottomSheet deviceManagerSheet;
+
+    private void showDeviceManager() {
+        if (service == null) return;
+        deviceManagerSheet = new DeviceManagerBottomSheet(this, service.getBleManager(), new DeviceManagerBottomSheet.DeviceActionListener() {
+            @Override
+            public void onConnectRequested(String macAddress) {
+                if (service != null) {
+                    service.getBleManager().connectDirect(macAddress);
+                }
+            }
+
+            @Override
+            public void onDisconnectRequested() {
+                if (service != null) {
+                    service.getBleManager().disconnect();
+                }
+            }
+
+            @Override
+            public void onStartScanRequested() {
+                if (service != null) {
+                    service.getBleManager().startDiscoveryOnly();
+                }
+            }
+
+            @Override
+            public void onStopScanRequested() {
+                if (service != null) {
+                    service.getBleManager().stopDiscovery();
+                }
+            }
+        });
+        deviceManagerSheet.show();
     }
 
     private void checkPermissionsAndStart() {
@@ -159,12 +204,24 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
     }
 
     private void updateConnectionUi(TrikiBleManager.ConnectionState state, String message) {
+        if (deviceManagerSheet != null) {
+            deviceManagerSheet.notifyConnectionChanged();
+        }
+
         switch (state) {
             case CONNECTED:
                 binding.txtStatus.setText("🟢 " + getString(R.string.status_connected));
                 binding.txtStatus.setTextColor(Color.parseColor("#00E676"));
                 binding.btnConnect.setText(R.string.btn_disconnect);
                 binding.btnConnect.setBackgroundColor(Color.parseColor("#D32F2F"));
+
+                if (service != null && service.getBleManager() != null) {
+                    String devName = service.getBleManager().getConnectedDeviceName();
+                    if (devName != null) {
+                        binding.txtConnectedDevice.setText(getString(R.string.device_connected_prefix, devName));
+                        binding.txtConnectedDevice.setVisibility(View.VISIBLE);
+                    }
+                }
                 break;
             case CONNECTING:
             case SCANNING:
@@ -179,6 +236,7 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
                 binding.btnConnect.setText(R.string.btn_connect);
                 binding.btnConnect.setBackgroundColor(Color.parseColor("#00C853"));
                 binding.txtBattery.setText("🔋 --%");
+                binding.txtConnectedDevice.setVisibility(View.GONE);
                 break;
         }
     }
@@ -273,6 +331,15 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
     public void onBatteryReceived(int percent) {
         runOnUiThread(() -> {
             binding.txtBattery.setText("🔋 " + percent + "%");
+        });
+    }
+
+    @Override
+    public void onDiscoveredDevice(android.bluetooth.BluetoothDevice device, int rssi) {
+        runOnUiThread(() -> {
+            if (deviceManagerSheet != null) {
+                deviceManagerSheet.addDiscoveredDevice(device, rssi);
+            }
         });
     }
 
