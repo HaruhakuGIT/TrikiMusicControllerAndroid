@@ -16,11 +16,12 @@
         android:orientation="horizontal"
         android:padding="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="✨ "
-            android:textSize="16sp" />
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_triki_cap"
+            android:contentDescription="Triki Cap" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -32,7 +33,7 @@
                 android:id="@+id/txtDiscoveredName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Triki Ring"
+                android:text="Triki Device"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 android:textStyle="bold" />

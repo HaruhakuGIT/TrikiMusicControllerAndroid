@@ -31,9 +31,9 @@
     <string name="notification_title">Triki Music Controller</string>
     <string name="notification_text">Background service is active</string>
     <string name="notification_channel_name">Triki Background Service</string>
-    <string name="notification_channel_desc">Background BLE and gesture listener for Triki ring</string>
+    <string name="notification_channel_desc">Background BLE and gesture listener for Triki device</string>
     <string name="gyro_unit">°/s</string>
-    <string name="permission_required">Bluetooth permissions are required to connect to Triki ring.</string>
+    <string name="permission_required">Bluetooth permissions are required to connect to Triki device.</string>
 
     <!-- Device Manager -->
     <string name="device_manager_title">Triki Device Manager</string>

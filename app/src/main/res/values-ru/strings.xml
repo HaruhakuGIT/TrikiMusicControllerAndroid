@@ -31,9 +31,9 @@
     <string name="notification_title">Triki Контроллер Музыки</string>
     <string name="notification_text">Служба работает в фоне</string>
     <string name="notification_channel_name">Фоновая служба Triki</string>
-    <string name="notification_channel_desc">Фоновое отслеживание BLE и жестов кольца Triki</string>
+    <string name="notification_channel_desc">Фоновое отслеживание BLE и жестов крышки Triki</string>
     <string name="gyro_unit">°/с</string>
-    <string name="permission_required">Для связи с кольцом Triki необходимы разрешения Bluetooth.</string>
+    <string name="permission_required">Для связи с крышкой Triki необходимы разрешения Bluetooth.</string>
 
     <!-- Менеджер устройств -->
     <string name="device_manager_title">Менеджер устройств Triki</string>

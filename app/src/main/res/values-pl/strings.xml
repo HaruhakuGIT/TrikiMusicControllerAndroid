@@ -31,9 +31,9 @@
     <string name="notification_title">Kontroler Muzyki Triki</string>
     <string name="notification_text">Usługa działa w tle</string>
     <string name="notification_channel_name">Usługa w tle Triki</string>
-    <string name="notification_channel_desc">Nasłuchiwanie BLE i gestów pierścienia Triki w tle</string>
+    <string name="notification_channel_desc">Nasłuchiwanie BLE i gestów kapsla Triki w tle</string>
     <string name="gyro_unit">°/s</string>
-    <string name="permission_required">Do połączenia z pierścieniem Triki wymagane są uprawnienia Bluetooth.</string>
+    <string name="permission_required">Do połączenia z kapslem Triki wymagane są uprawnienia Bluetooth.</string>
 
     <!-- Menedżer urządzeń -->
     <string name="device_manager_title">Menedżer urządzeń Triki</string>
