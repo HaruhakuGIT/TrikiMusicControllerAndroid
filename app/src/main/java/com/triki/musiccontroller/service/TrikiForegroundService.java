@@ -30,7 +30,7 @@ import com.triki.musiccontroller.model.MusicAction;
 public class TrikiForegroundService extends Service {
 
     private static final String TAG = "TrikiForegroundService";
-    private static final String CHANNEL_ID = "triki_foreground_channel_v3";
+    private static final String CHANNEL_ID = "triki_foreground_channel_v6";
     private static final int NOTIFICATION_ID = 1001;
 
     public static final String ACTION_TOGGLE_CONNECT = "com.triki.musiccontroller.ACTION_TOGGLE_CONNECT";
@@ -267,7 +267,7 @@ public class TrikiForegroundService extends Service {
             default: statusStr = getString(R.string.status_disconnected); break;
         }
 
-        android.graphics.Bitmap largeIcon = android.graphics.BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        android.graphics.Bitmap largeIcon = android.graphics.BitmapFactory.decodeResource(getResources(), R.drawable.ic_triki_cap);
 
         return new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.notification_title))
@@ -288,6 +288,9 @@ public class TrikiForegroundService extends Service {
                 try {
                     nm.deleteNotificationChannel("triki_foreground_channel");
                     nm.deleteNotificationChannel("triki_foreground_channel_v2");
+                    nm.deleteNotificationChannel("triki_foreground_channel_v3");
+                    nm.deleteNotificationChannel("triki_foreground_channel_v4");
+                    nm.deleteNotificationChannel("triki_foreground_channel_v5");
                 } catch (Exception ignored) {}
 
                 NotificationChannel channel = new NotificationChannel(
