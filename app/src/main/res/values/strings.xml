@@ -22,7 +22,9 @@
 
     <string name="double_click_hint">2 clicks = Play/Pause • 3 clicks = Volume (Up/Down)</string>
     <string name="double_click_badge">Double tap</string>
-    <string name="volume_mode_hint">Volume Mode: Move UP (+) / DOWN (-). 1s still = confirm</string>
+    <string name="volume_mode_hint">Volume Mode: Flat = Down (-) • On side = Up (+)</string>
+    <string name="volume_mode_hint_flat">Flat: twitch to lower volume (-)</string>
+    <string name="volume_mode_hint_vertical">On side: twitch to raise volume (+)</string>
     <string name="volume_mode_active">Volume Mode Active</string>
     <string name="volume_mode_confirmed">Volume confirmed by button</string>
     <string name="volume_mode_auto_confirmed">Volume auto-confirmed (still for 1s)</string>

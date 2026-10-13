@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
     private ActivityMainBinding binding;
     private TrikiForegroundService service;
     private boolean isBound = false;
+    private boolean isVolumeModeUiActive = false;
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private final ServiceConnection connection = new ServiceConnection() {
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
 
             if (service.getGestureEngine() != null) {
                 binding.txtTrainedCount.setText(getString(R.string.trained_models, service.getGestureEngine().getProfileCount()));
+            }
+
+            if (service.getBleManager().getState() == TrikiBleManager.ConnectionState.DISCONNECTED) {
+                service.getBleManager().startScanAndConnect();
             }
         }
 
@@ -326,6 +331,11 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
 
             binding.txtGyroZ.setText(String.format(java.util.Locale.US, "%.1f %s", sample.gyroZ, gUnit));
             binding.pbGyroZ.setProgress((int) Math.max(0, Math.min(1000, sample.gyroZ + 500)));
+
+            if (isVolumeModeUiActive) {
+                boolean isVertical = (Math.abs(sample.accelZ) < 0.55 && Math.hypot(sample.accelX, sample.accelY) >= 0.50);
+                binding.txtGestureHint.setText("🔊 " + getString(isVertical ? R.string.volume_mode_hint_vertical : R.string.volume_mode_hint_flat));
+            }
         });
     }
 
@@ -411,6 +421,7 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
     @Override
     public void onVolumeModeStateChanged(boolean isActive, String message) {
         runOnUiThread(() -> {
+            isVolumeModeUiActive = isActive;
             if (isActive) {
                 binding.txtButtonStateBadge.setText(R.string.button_state_volume_mode);
                 binding.txtButtonStateBadge.setBackgroundResource(R.drawable.bg_button_volume_mode);

@@ -22,7 +22,9 @@
 
     <string name="double_click_hint">2 kliknięcia = Pauza/Odtwórz • 3 kliknięcia = Głośność (Góra/Dół)</string>
     <string name="double_click_badge">2 kliknięcia</string>
-    <string name="volume_mode_hint">Tryb głośności: Ruch W GÓRĘ (+) / W DÓŁ (-). 1s spokoju = zatwierdź</string>
+    <string name="volume_mode_hint">Tryb głośności: Płasko = Ciszej (-) • Bokiem = Głośniej (+)</string>
+    <string name="volume_mode_hint_flat">Płasko: szarpnij aby ŚCISZYĆ (-)</string>
+    <string name="volume_mode_hint_vertical">Bokiem (pionowo): szarpnij aby POGŁOŚNIĆ (+)</string>
     <string name="volume_mode_active">Tryb głośności aktywny</string>
     <string name="volume_mode_confirmed">Głośność zatwierdzona przyciskiem</string>
     <string name="volume_mode_auto_confirmed">Głośność zatwierdzona automatycznie (1s spokoju)</string>

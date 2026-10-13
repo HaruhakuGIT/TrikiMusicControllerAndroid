@@ -482,13 +482,13 @@ public class TrikiBleManager {
                 }
             }
 
-            short ax = readShortLE(packetBuffer.get(2), packetBuffer.get(3));
-            short ay = readShortLE(packetBuffer.get(4), packetBuffer.get(5));
-            short az = readShortLE(packetBuffer.get(6), packetBuffer.get(7));
+            short gx = readShortLE(packetBuffer.get(2), packetBuffer.get(3));
+            short gy = readShortLE(packetBuffer.get(4), packetBuffer.get(5));
+            short gz = readShortLE(packetBuffer.get(6), packetBuffer.get(7));
 
-            short gx = readShortLE(packetBuffer.get(8), packetBuffer.get(9));
-            short gy = readShortLE(packetBuffer.get(10), packetBuffer.get(11));
-            short gz = readShortLE(packetBuffer.get(12), packetBuffer.get(13));
+            short ax = readShortLE(packetBuffer.get(8), packetBuffer.get(9));
+            short ay = readShortLE(packetBuffer.get(10), packetBuffer.get(11));
+            short az = readShortLE(packetBuffer.get(12), packetBuffer.get(13));
 
             float accelX = (float) (ax / ACCEL_SCALE);
             float accelY = (float) (ay / ACCEL_SCALE);

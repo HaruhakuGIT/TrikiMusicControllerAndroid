@@ -208,15 +208,7 @@ public class TrikiForegroundService extends Service {
         awaitingNeutralReturn = false;
         vibrateDoubleTick();
 
-        if (lastKnownSample != null) {
-            gravX = lastKnownSample.accelX;
-            gravY = lastKnownSample.accelY;
-            gravZ = lastKnownSample.accelZ;
-        } else {
-            gravX = 0; gravY = 0; gravZ = 1.0;
-        }
-
-        Log.d(TAG, "Entered Volume Mode! Settling for 500ms to ignore button click release artifacts.");
+        Log.d(TAG, "Entered Volume Mode (Posture-Based: Flat = Down (-), On Side/Vertical = Up (+))");
 
         if (serviceCallback != null) {
             serviceCallback.onVolumeModeStateChanged(true, getString(R.string.volume_mode_hint));
@@ -237,41 +229,27 @@ public class TrikiForegroundService extends Service {
     private void processVolumeMotion(ImuSample sample) {
         long now = System.currentTimeMillis();
 
-        // 1. Settling window: ignore first 500ms after entering mode so button release motion doesn't falsely trigger volume down/up
-        if (now - volumeModeStartTime < 500) {
-            gravX = gravX * 0.90 + sample.accelX * 0.10;
-            gravY = gravY * 0.90 + sample.accelY * 0.10;
-            gravZ = gravZ * 0.90 + sample.accelZ * 0.10;
+        // 1. Settling window: ignore first 350ms after entering mode so button release doesn't count as a twitch
+        if (now - volumeModeStartTime < 350) {
             stillStartTime = now;
             return;
         }
 
-        // 2. Dynamic gravity estimation (slow complementary filter tracking natural hand posture changes)
-        gravX = gravX * 0.96 + sample.accelX * 0.04;
-        gravY = gravY * 0.96 + sample.accelY * 0.04;
-        gravZ = gravZ * 0.96 + sample.accelZ * 0.04;
-
-        double gravMag = Math.sqrt(gravX * gravX + gravY * gravY + gravZ * gravZ);
-        if (gravMag < 0.01) gravMag = 1.0;
-
-        double ugX = gravX / gravMag;
-        double ugY = gravY / gravMag;
-        double ugZ = gravZ / gravMag;
-
-        // Acceleration along current vertical gravity axis
-        double totalGAlongGravity = (sample.accelX * ugX + sample.accelY * ugY + sample.accelZ * ugZ);
-        double rawDelta = totalGAlongGravity - gravMag;
-
-        // Strict noise gate / deadband: ignore all micro-movements, trembling, and twitches less than 0.12G
-        double verticalDelta = (Math.abs(rawDelta) < 0.12) ? 0.0 : rawDelta;
+        double aMag = sample.getAccelMagnitude();
         double gMag = sample.getGyroMagnitude();
 
-        // 3. Stillness check: hand is still when vertical deviation is 0.0 (below noise gate) and angular rate is modest (< 75 deg/s)
-        boolean isStill = (verticalDelta == 0.0 && gMag < 75.0);
+        // Orientation detection:
+        // Triki lying flat (horizontal): |accelZ| is dominant (face parallel to ground), in-plane acceleration is small
+        // Triki standing on its side / vertical: in-plane acceleration (hypot(X, Y)) is dominant, |accelZ| is small
+        boolean isVertical = (Math.abs(sample.accelZ) < 0.55 && Math.hypot(sample.accelX, sample.accelY) >= 0.50);
+
+        // 2. Stillness check: hand is resting if rotation is low (< 70 deg/s) and accel is near 1.0G (0.82 .. 1.18G)
+        // Ignores tremor / noise < 0.12G
+        boolean isStill = (gMag < 70.0 && Math.abs(aMag - 1.0) < 0.18);
 
         if (isStill) {
             long stillDuration = now - stillStartTime;
-            if (stillDuration >= 1000) { // 1.0 second of stillness -> Auto-confirm!
+            if (stillDuration >= 1000) { // 1.0 second without deliberate twitches -> Auto-confirm and exit!
                 confirmAndExitVolumeMode(true);
                 return;
             }
@@ -279,38 +257,37 @@ public class TrikiForegroundService extends Service {
             stillStartTime = now;
         }
 
-        // 4. Hysteresis / neutral return deadband
+        // 3. Hysteresis / deadband return:
+        // After each volume step, require returning towards calm state or wait 500ms before next step
         if (awaitingNeutralReturn) {
-            if (verticalDelta == 0.0 || (now - lastVolumeStepTime >= 600)) {
+            if (isStill || (now - lastVolumeStepTime >= 500)) {
                 awaitingNeutralReturn = false;
             }
         }
 
-        // 5. Deliberate vertical motion detection:
-        // Strong, intentional movement required:
-        // Upward (Louder): verticalDelta >= +0.32G (or >= +0.20G with intentional rotation >= 110 deg/s)
-        // Downward (Quieter): verticalDelta <= -0.32G (or <= -0.20G with intentional rotation >= 110 deg/s)
-        boolean isMovingUp = (verticalDelta >= 0.32 || (verticalDelta >= 0.20 && gMag >= 110.0));
-        boolean isMovingDown = (verticalDelta <= -0.32 || (verticalDelta <= -0.20 && gMag >= 110.0));
+        // 4. Twitch / flick detection ("дёргать"):
+        // Requires a deliberate, intentional shake / flick / twitch:
+        // Gyro angular velocity >= 120 deg/s OR dynamic acceleration spike >= 0.35G (|aMag - 1.0| >= 0.35)
+        boolean isTwitch = (gMag >= 120.0 || Math.abs(aMag - 1.0) >= 0.35);
 
-        if (!awaitingNeutralReturn && (now - lastVolumeStepTime >= 450)) {
-            if (isMovingUp) {
-                lastVolumeStepTime = now;
-                stillStartTime = now;
-                awaitingNeutralReturn = true;
+        if (!awaitingNeutralReturn && isTwitch && (now - lastVolumeStepTime >= 350)) {
+            lastVolumeStepTime = now;
+            stillStartTime = now;
+            awaitingNeutralReturn = true;
+
+            if (isVertical) {
+                // Standing vertically / on edge -> VOLUME UP (+)
                 mediaController.volumeUp();
                 vibrateFeedback(30);
-                Log.d(TAG, "Volume UP! verticalDelta=" + String.format(java.util.Locale.US, "%.2f", verticalDelta));
+                Log.d(TAG, "Twitch detected in VERTICAL posture -> Volume UP (+) [gMag=" + (int) gMag + ", aMag=" + String.format(java.util.Locale.US, "%.2f", aMag) + "]");
                 if (serviceCallback != null) {
                     serviceCallback.onVolumeStepped(true);
                 }
-            } else if (isMovingDown) {
-                lastVolumeStepTime = now;
-                stillStartTime = now;
-                awaitingNeutralReturn = true;
+            } else {
+                // Lying flat / horizontal -> VOLUME DOWN (-)
                 mediaController.volumeDown();
                 vibrateFeedback(30);
-                Log.d(TAG, "Volume DOWN! verticalDelta=" + String.format(java.util.Locale.US, "%.2f", verticalDelta));
+                Log.d(TAG, "Twitch detected in FLAT posture -> Volume DOWN (-) [gMag=" + (int) gMag + ", aMag=" + String.format(java.util.Locale.US, "%.2f", aMag) + "]");
                 if (serviceCallback != null) {
                     serviceCallback.onVolumeStepped(false);
                 }
