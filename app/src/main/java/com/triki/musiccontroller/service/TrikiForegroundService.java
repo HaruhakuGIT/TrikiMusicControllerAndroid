@@ -53,6 +53,8 @@ public class TrikiForegroundService extends Service {
     private long stillStartTime = 0;
     private long lastVolumeStepTime = 0;
     private double baseRestX = 0, baseRestY = 0, baseRestZ = 1.0;
+    private double filteredDotG = 1.0;
+    private boolean awaitingNeutralReturn = false;
     private ImuSample lastKnownSample = null;
 
     public interface ServiceCallback {
@@ -202,6 +204,7 @@ public class TrikiForegroundService extends Service {
         long now = System.currentTimeMillis();
         stillStartTime = now;
         lastVolumeStepTime = now;
+        awaitingNeutralReturn = false;
         vibrateDoubleTick();
 
         if (lastKnownSample != null) {
@@ -209,8 +212,10 @@ public class TrikiForegroundService extends Service {
             baseRestX = lastKnownSample.accelX / mag;
             baseRestY = lastKnownSample.accelY / mag;
             baseRestZ = lastKnownSample.accelZ / mag;
+            filteredDotG = (lastKnownSample.accelX * baseRestX + lastKnownSample.accelY * baseRestY + lastKnownSample.accelZ * baseRestZ);
         } else {
             baseRestX = 0; baseRestY = 0; baseRestZ = 1.0;
+            filteredDotG = 1.0;
         }
 
         Log.d(TAG, "Entered Volume Mode! Baseline rest: (" +
@@ -237,30 +242,48 @@ public class TrikiForegroundService extends Service {
         double aMag = sample.getAccelMagnitude();
         double gMag = sample.getGyroMagnitude();
 
-        // 1. Stillness check: hand is calm if acceleration is near 1.0G (0.80 .. 1.22) and rotation is low (< 35 deg/s)
-        boolean isStill = (Math.abs(aMag - 1.0) < 0.22 && gMag < 35.0);
+        // Raw vertical projection along gravity baseline
+        double rawDotG = (sample.accelX * baseRestX + sample.accelY * baseRestY + sample.accelZ * baseRestZ);
+
+        // Low-pass filter (Exponential Moving Average) to eliminate hand tremors / twitching:
+        // High-frequency tremor has zero net displacement and oscillates rapidly.
+        filteredDotG = filteredDotG * 0.75 + rawDotG * 0.25;
+
+        // 1. Stillness check: hand is considered resting if filtered acceleration is near 1.0G (0.75 .. 1.25)
+        // and rotation is modest (< 75 deg/s) to accommodate physiological tremor without locking the user out.
+        boolean isStill = (Math.abs(filteredDotG - 1.0) < 0.25 && gMag < 75.0);
 
         if (isStill) {
             long stillDuration = now - stillStartTime;
-            if (stillDuration >= 1000) { // 1.0 second without movement -> Auto-confirm!
+            if (stillDuration >= 1000) { // 1.0 second without deliberate movement -> Auto-confirm!
                 confirmAndExitVolumeMode(true);
                 return;
             }
         } else {
-            stillStartTime = now; // Hand is moving, reset stillness countdown
+            // Deliberate or active movement resets the stillness countdown
+            stillStartTime = now;
         }
 
-        // 2. Vertical motion and tilt detection relative to baseline rest vector
-        double dotG = (sample.accelX * baseRestX + sample.accelY * baseRestY + sample.accelZ * baseRestZ);
+        // Hysteresis / neutral return deadband: after stepping volume, require returning towards neutral
+        // or waiting 600ms before triggering the next volume step.
+        if (awaitingNeutralReturn) {
+            if ((filteredDotG >= 0.85 && filteredDotG <= 1.18) || (now - lastVolumeStepTime >= 600)) {
+                awaitingNeutralReturn = false;
+            }
+        }
 
-        // Movement or tilt upward (raising hand) vs downward (lowering hand)
-        boolean isMovingUp = (dotG >= 1.24 || (sample.gyroX >= 40.0 && dotG >= 0.92));
-        boolean isMovingDown = (dotG <= 0.74 || (sample.gyroX <= -40.0 && dotG <= 1.08));
+        // 2. Deliberate vertical motion detection:
+        // Requires STRONG intentional gesture instead of slight twitches:
+        // Upward: filtered vertical G >= 1.40G, OR (filteredDotG >= 1.20G with intentional rotation >= 110 deg/s)
+        // Downward: filtered vertical G <= 0.60G, OR (filteredDotG <= 0.80G with intentional rotation >= 110 deg/s)
+        boolean isMovingUp = (filteredDotG >= 1.40 || (filteredDotG >= 1.20 && gMag >= 110.0));
+        boolean isMovingDown = (filteredDotG <= 0.60 || (filteredDotG <= 0.80 && gMag >= 110.0));
 
-        if (now - lastVolumeStepTime >= 300) {
+        if (!awaitingNeutralReturn && (now - lastVolumeStepTime >= 400)) {
             if (isMovingUp) {
                 lastVolumeStepTime = now;
                 stillStartTime = now;
+                awaitingNeutralReturn = true;
                 mediaController.volumeUp();
                 vibrateFeedback(30);
                 if (serviceCallback != null) {
@@ -269,6 +292,7 @@ public class TrikiForegroundService extends Service {
             } else if (isMovingDown) {
                 lastVolumeStepTime = now;
                 stillStartTime = now;
+                awaitingNeutralReturn = true;
                 mediaController.volumeDown();
                 vibrateFeedback(30);
                 if (serviceCallback != null) {
