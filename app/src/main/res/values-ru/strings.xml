@@ -20,8 +20,13 @@
     <string name="button_state_released">ОТПУЩЕНА</string>
     <string name="button_state_held">ЗАЖАТА (СЛУШАЮ ЖЕСТ)</string>
 
-    <string name="double_click_hint">2 нажатия кнопки = Пауза / Плей</string>
+    <string name="double_click_hint">2 клика = Пауза/Плей • 3 клика = Громкость (Вверх/Вниз)</string>
     <string name="double_click_badge">2 клика</string>
+    <string name="volume_mode_hint">Режим громкости: Рука ВВЕРХ (+) / ВНИЗ (-). 1 сек покоя = подтвердить</string>
+    <string name="volume_mode_active">Режим регулировки громкости активен</string>
+    <string name="volume_mode_confirmed">Громкость подтверждена кнопкой</string>
+    <string name="volume_mode_auto_confirmed">Громкость сохранена (1 сек без движения)</string>
+    <string name="button_state_volume_mode">РЕЖИМ ГРОМКОСТИ (ВВЕРХ/ВНИЗ)</string>
     <string name="sensors_title">ПОКАЗАТЕЛИ ДАТЧИКОВ В РЕАЛЬНОМ ВРЕМЕНИ</string>
     <string name="accel_section">АКСЕЛЕРОМЕТР (УСКОРЕНИЕ &amp; НАКЛОН)</string>
     <string name="gyro_section">ГИРОСКОП (СКОРОСТЬ ВРАЩЕНИЯ)</string>

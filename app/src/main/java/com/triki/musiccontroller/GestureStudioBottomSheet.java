@@ -144,10 +144,8 @@ public class GestureStudioBottomSheet {
         // Step 3: List & Header
         txtHeader = v.findViewById(R.id.txtRecordedGesturesHeader);
         txtEmptyList = v.findViewById(R.id.txtEmptyGesturesList);
-        MaterialButton btnRestore = v.findViewById(R.id.btnRestorePresets);
         MaterialButton btnClearAll = v.findViewById(R.id.btnClearAllGestures);
 
-        btnRestore.setOnClickListener(v1 -> confirmRestoreDefaults());
         btnClearAll.setOnClickListener(v1 -> confirmClearAll());
 
         RecyclerView recyclerView = v.findViewById(R.id.recyclerRecordedGestures);
@@ -327,23 +325,6 @@ public class GestureStudioBottomSheet {
                             modelChangedListener.onModelChanged(gestureEngine.getTotalRecordingsCount(), gestureEngine.getProfileCount());
                         }
                     }
-                })
-                .setNegativeButton(R.string.btn_cancel, null)
-                .show();
-    }
-
-    private void confirmRestoreDefaults() {
-        new AlertDialog.Builder(context)
-                .setTitle(R.string.btn_restore_defaults)
-                .setMessage("Przywrócić fabryczne profile gestów?")
-                .setPositiveButton("Przywróć", (d, w) -> {
-                    gestureEngine.getRepository().restoreDefaultGestures(context);
-                    gestureEngine.trainFromSavedRecordings(context);
-                    loadGesturesList();
-                    if (modelChangedListener != null) {
-                        modelChangedListener.onModelChanged(gestureEngine.getTotalRecordingsCount(), gestureEngine.getProfileCount());
-                    }
-                    Toast.makeText(context, "Przywrócono domyślne gesty.", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.btn_cancel, null)
                 .show();

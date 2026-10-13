@@ -37,58 +37,6 @@ public class GestureRepository {
             Log.d(TAG, "Created gestures dir: " + created);
         }
         this.gson = new GsonBuilder().setPrettyPrinting().create();
-        ensureDefaultGestures(context);
-    }
-
-    public synchronized void ensureDefaultGestures(Context context) {
-        File[] existing = gesturesDir.listFiles((dir, name) -> name.endsWith(".json"));
-        if (existing != null && existing.length > 0) {
-            return; // Already initialized with gestures
-        }
-
-        try {
-            String[] assets = context.getAssets().list("gestures");
-            if (assets == null || assets.length == 0) return;
-
-            for (String file : assets) {
-                if (!file.endsWith(".json")) continue;
-                try (InputStream in = context.getAssets().open("gestures/" + file);
-                     OutputStream out = new FileOutputStream(new File(gesturesDir, file))) {
-                    byte[] buf = new byte[4096];
-                    int len;
-                    while ((len = in.read(buf)) > 0) {
-                        out.write(buf, 0, len);
-                    }
-                } catch (Exception e) {
-                    Log.w(TAG, "Failed copying asset gesture: " + file, e);
-                }
-            }
-            Log.d(TAG, "Initialized default gestures from assets to internal storage");
-        } catch (Exception e) {
-            Log.e(TAG, "Error listing asset gestures", e);
-        }
-    }
-
-    public synchronized void restoreDefaultGestures(Context context) {
-        clearAll();
-        try {
-            String[] assets = context.getAssets().list("gestures");
-            if (assets != null) {
-                for (String file : assets) {
-                    if (!file.endsWith(".json")) continue;
-                    try (InputStream in = context.getAssets().open("gestures/" + file);
-                         OutputStream out = new FileOutputStream(new File(gesturesDir, file))) {
-                        byte[] buf = new byte[4096];
-                        int len;
-                        while ((len = in.read(buf)) > 0) {
-                            out.write(buf, 0, len);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error restoring default gestures", e);
-        }
     }
 
     public synchronized String saveRecording(RecordedGesture gesture) {

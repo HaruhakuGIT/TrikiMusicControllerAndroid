@@ -20,8 +20,13 @@
     <string name="button_state_released">RELEASED</string>
     <string name="button_state_held">HELD (LISTENING)</string>
 
-    <string name="double_click_hint">Double-click button = Play / Pause</string>
+    <string name="double_click_hint">2 clicks = Play/Pause • 3 clicks = Volume (Up/Down)</string>
     <string name="double_click_badge">Double tap</string>
+    <string name="volume_mode_hint">Volume Mode: Move UP (+) / DOWN (-). 1s still = confirm</string>
+    <string name="volume_mode_active">Volume Mode Active</string>
+    <string name="volume_mode_confirmed">Volume confirmed by button</string>
+    <string name="volume_mode_auto_confirmed">Volume auto-confirmed (still for 1s)</string>
+    <string name="button_state_volume_mode">VOLUME MODE (UP / DOWN)</string>
     <string name="sensors_title">REAL-TIME SENSORS</string>
     <string name="accel_section">ACCELEROMETER (G &amp; TILT)</string>
     <string name="gyro_section">GYROSCOPE (ROTATION SPEED)</string>

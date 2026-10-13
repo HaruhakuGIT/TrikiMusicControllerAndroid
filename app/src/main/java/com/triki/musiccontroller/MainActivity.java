@@ -408,6 +408,46 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
         });
     }
 
+    @Override
+    public void onVolumeModeStateChanged(boolean isActive, String message) {
+        runOnUiThread(() -> {
+            if (isActive) {
+                binding.txtButtonStateBadge.setText(R.string.button_state_volume_mode);
+                binding.txtButtonStateBadge.setBackgroundResource(R.drawable.bg_button_volume_mode);
+                binding.txtButtonStateBadge.setTextColor(Color.WHITE);
+
+                binding.bannerGestureStatus.setStrokeColor(Color.parseColor("#2979FF"));
+                binding.txtGestureHint.setText("🔊 " + message);
+                binding.txtGestureHint.setTextColor(Color.parseColor("#2979FF"));
+            } else {
+                binding.txtButtonStateBadge.setText(R.string.button_state_released);
+                binding.txtButtonStateBadge.setBackgroundResource(R.drawable.bg_button_released);
+                binding.txtButtonStateBadge.setTextColor(Color.parseColor("#ECEFF1"));
+
+                binding.bannerGestureStatus.setStrokeColor(Color.parseColor("#2A354C"));
+                binding.txtGestureHint.setText("⚪ " + message);
+                binding.txtGestureHint.setTextColor(Color.parseColor("#80DEEA"));
+
+                handler.postDelayed(() -> {
+                    if (binding.txtButtonStateBadge.getText().toString().equals(getString(R.string.button_state_released))) {
+                        binding.txtGestureHint.setText("⚪ " + getString(R.string.gesture_hint_idle));
+                    }
+                }, 1500);
+            }
+        });
+    }
+
+    @Override
+    public void onVolumeStepped(boolean isUp) {
+        runOnUiThread(() -> {
+            if (isUp) {
+                flashCard(binding.cardVolUp, Color.parseColor("#2979FF"));
+            } else {
+                flashCard(binding.cardVolDown, Color.parseColor("#2979FF"));
+            }
+        });
+    }
+
     private void flashCard(MaterialCardView card, int color) {
         card.setStrokeColor(color);
         card.setCardBackgroundColor(Color.parseColor("#263238"));

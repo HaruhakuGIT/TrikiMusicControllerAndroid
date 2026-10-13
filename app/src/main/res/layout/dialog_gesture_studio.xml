@@ -408,14 +408,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     android:paddingHorizontal="18dp"
-                    android:layout_marginBottom="6dp">
+                    android:layout_marginBottom="8dp">
 
                     <TextView
                         android:id="@+id/txtRecordedGesturesHeader"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="3. ZAPISANE GESTY (0)"
                         android:textColor="#00E5FF"
                         android:textSize="12sp"
@@ -423,39 +425,16 @@
                         android:letterSpacing="0.06"
                         android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:gravity="center_vertical|end"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnRestorePresets"
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:minWidth="0dp"
-                            android:paddingHorizontal="6dp"
-                            android:text="@string/btn_restore_defaults"
-                            android:textColor="#80DEEA"
-                            android:textSize="11sp"
-                            app:icon="@drawable/ic_restore"
-                            app:iconSize="14dp"
-                            app:iconTint="#80DEEA" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnClearAllGestures"
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="32dp"
-                            android:minWidth="0dp"
-                            android:layout_marginStart="6dp"
-                            android:paddingHorizontal="6dp"
-                            android:text="@string/btn_delete_all"
-                            android:textColor="#FF5252"
-                            android:textSize="11sp" />
-                    </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnClearAllGestures"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:minWidth="0dp"
+                        android:paddingHorizontal="8dp"
+                        android:text="@string/btn_delete_all"
+                        android:textColor="#FF5252"
+                        android:textSize="11sp" />
                 </LinearLayout>
 
                 <!-- Empty State TextView -->

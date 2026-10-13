@@ -20,8 +20,13 @@
     <string name="button_state_released">ZWOLNIONY</string>
     <string name="button_state_held">PRZYTRZYMANY (NASŁUCHIWANIE)</string>
 
-    <string name="double_click_hint">2 kliknięcia przycisku = Pauza / Odtwórz</string>
+    <string name="double_click_hint">2 kliknięcia = Pauza/Odtwórz • 3 kliknięcia = Głośność (Góra/Dół)</string>
     <string name="double_click_badge">2 kliknięcia</string>
+    <string name="volume_mode_hint">Tryb głośności: Ruch W GÓRĘ (+) / W DÓŁ (-). 1s spokoju = zatwierdź</string>
+    <string name="volume_mode_active">Tryb głośności aktywny</string>
+    <string name="volume_mode_confirmed">Głośność zatwierdzona przyciskiem</string>
+    <string name="volume_mode_auto_confirmed">Głośność zatwierdzona automatycznie (1s spokoju)</string>
+    <string name="button_state_volume_mode">TRYB GŁOŚNOŚCI (GÓRA/DÓŁ)</string>
     <string name="sensors_title">CZUJNIKI W CZASIE RZECZYWISTYM</string>
     <string name="accel_section">AKCELEROMETR (PRZYSPIESZENIE &amp; POCHYLENIE)</string>
     <string name="gyro_section">ŻYROSKOP (PRĘDKOŚĆ OBROTOWA)</string>
