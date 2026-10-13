@@ -68,7 +68,7 @@
                         android:layout_marginTop="2dp"
                         android:textColor="#00E5FF"
                         android:textSize="11sp"
-                        tools:text="🧠 Wyuczone profile z PC: 2" />
+                        tools:text="🧠 Gesty: 2" />
                 </LinearLayout>
 
                 <com.google.android.material.card.MaterialCardView

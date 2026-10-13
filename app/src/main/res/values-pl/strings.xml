@@ -26,7 +26,7 @@
     <string name="accel_section">AKCELEROMETR (PRZYSPIESZENIE &amp; POCHYLENIE)</string>
     <string name="gyro_section">ŻYROSKOP (PRĘDKOŚĆ OBROTOWA)</string>
     <string name="button_section">FIZYCZNY PRZYCISK (PAKIET 0x22)</string>
-    <string name="trained_models">🧠 Wyuczone profile z PC: %1$d</string>
+    <string name="trained_models">🧠 Gesty: %1$d</string>
 
     <string name="notification_title">Kontroler Muzyki Triki</string>
     <string name="notification_text">Usługa działa w tle</string>

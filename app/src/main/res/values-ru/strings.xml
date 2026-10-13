@@ -26,7 +26,7 @@
     <string name="accel_section">АКСЕЛЕРОМЕТР (УСКОРЕНИЕ &amp; НАКЛОН)</string>
     <string name="gyro_section">ГИРОСКОП (СКОРОСТЬ ВРАЩЕНИЯ)</string>
     <string name="button_section">ФИЗИЧЕСКАЯ КНОПКА (ПАКЕТ 0x22)</string>
-    <string name="trained_models">🧠 Обучено жестов с ПК: %1$d</string>
+    <string name="trained_models">🧠 Жесты: %1$d</string>
 
     <string name="notification_title">Triki Контроллер Музыки</string>
     <string name="notification_text">Служба работает в фоне</string>

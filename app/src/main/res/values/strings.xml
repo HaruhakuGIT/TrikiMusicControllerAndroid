@@ -26,7 +26,7 @@
     <string name="accel_section">ACCELEROMETER (G &amp; TILT)</string>
     <string name="gyro_section">GYROSCOPE (ROTATION SPEED)</string>
     <string name="button_section">PHYSICAL BUTTON (PACKET 0x22)</string>
-    <string name="trained_models">🧠 Trained Profiles: %1$d</string>
+    <string name="trained_models">🧠 Gestures: %1$d</string>
 
     <string name="notification_title">Triki Music Controller</string>
     <string name="notification_text">Background service is active</string>
