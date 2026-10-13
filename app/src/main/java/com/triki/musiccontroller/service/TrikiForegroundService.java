@@ -73,7 +73,7 @@ public class TrikiForegroundService extends Service {
         mediaController = new MediaController(this);
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         gestureEngine = new GestureEngine();
-        gestureEngine.loadTrainedGestures(this);
+        gestureEngine.trainFromSavedRecordings(this);
         bleManager = new TrikiBleManager(this);
 
         gestureEngine.setListener((action, name, confidence) -> {
@@ -224,6 +224,10 @@ public class TrikiForegroundService extends Service {
 
     public TrikiBleManager getBleManager() {
         return bleManager;
+    }
+
+    public GestureEngine getGestureEngine() {
+        return gestureEngine;
     }
 
     public void toggleConnect() {

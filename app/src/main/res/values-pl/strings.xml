@@ -49,6 +49,35 @@
     <string name="device_scan">Skanuj</string>
     <string name="device_scanning">Szukanie Triki...</string>
     <string name="no_saved_devices">Brak zapamiętanych urządzeń.\nKliknij «Skanuj», aby znaleźć Twoje Triki.</string>
-    <string name="device_connected_prefix">Połączono z: %1$s</string>
     <string name="btn_close">Zamknij</string>
+
+    <!-- Studio programowania gestów -->
+    <string name="btn_gesture_studio">Programowanie gestów</string>
+    <string name="studio_title">Studio Programowania Gestów</string>
+    <string name="studio_subtitle">Nagrywaj własne gesty i usuwaj pojedyncze próbki</string>
+    <string name="step1_title">1. WYBIERZ AKCJĘ DO NAUKI</string>
+    <string name="step2_title">2. SESJA NAGRYWANIA</string>
+    <string name="step2_duration">Czas trwania:</string>
+    <string name="step2_dur5">5 sek</string>
+    <string name="step2_dur7">7 sek</string>
+    <string name="step2_dur10">10 sek</string>
+    <string name="step2_btn_record">ROZPOCZNIJ NAGRYWANIE</string>
+    <string name="step2_btn_recording">NAGRYWANIE...</string>
+    <string name="step2_countdown">Przygotuj się: %1$d s</string>
+    <string name="step2_recording_hint">Przytrzymaj przycisk Triki i powtórz gest 3–5 razy!</string>
+    <string name="step2_ready">Gotowy do nagrywania</string>
+    <string name="step2_completed">Gotowe! Wykryto i zapisano powtórzeń: %1$d</string>
+    <string name="step2_no_data">Brak danych BLE podczas nagrywania. Sprawdź połączenie.</string>
+    <string name="step3_title">3. ZAPISANE GESTY (%1$d)</string>
+    <string name="btn_restore_defaults">Przywróć domyślne</string>
+    <string name="btn_delete_confirm_title">Usunąć ten gest?</string>
+    <string name="btn_delete_confirm_msg">Ten plik gestu zostanie usunięty, a model rozpoznawania zaktualizowany.</string>
+    <string name="btn_delete_confirm_ok">Usuń</string>
+    <string name="btn_cancel">Anuluj</string>
+    <string name="btn_delete_all">Wyczyść wszystko</string>
+    <string name="btn_delete_all_confirm_msg">Czy na pewno chcesz usunąć wszystkie zapisane gesty?</string>
+    <string name="no_recorded_gestures">Brak zapisanych gestów.\nWybierz akcję powyżej i nagraj swój pierwszy gest!</string>
+    <string name="action_idle">Spoczynek / Szum ręki</string>
+    <string name="gesture_deleted_toast">Gest usunięty. Model zaktualizowany.</string>
+    <string name="gesture_saved_toast">Zapisano %1$d nowych gestów! Model zaktualizowany.</string>
 </resources>

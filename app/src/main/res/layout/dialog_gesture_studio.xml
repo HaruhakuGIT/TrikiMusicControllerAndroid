@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_bottom_sheet_surface"
+    android:orientation="vertical">
+
+    <!-- SHEET DRAG HANDLE -->
+    <View
+        android:layout_width="48dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_bottom_sheet_handle" />
+
+    <!-- TOP HEADER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="18dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/ic_gesture_studio"
+            app:tint="#00E5FF"
+            android:contentDescription="@string/studio_title" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/studio_title"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/studio_subtitle"
+                android:textColor="#80DEEA"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCloseStudio"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:paddingHorizontal="10dp"
+            android:text="@string/btn_close"
+            android:textColor="#90A4AE"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#202A3C" />
+
+    <!-- SCROLLABLE BODY -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- STEP 1: ACTION SELECTOR -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/step1_title"
+                        android:textColor="#00E5FF"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.06"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupAction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipPlayPause"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏯ Play/Pause"
+                                android:textColor="#ECEFF1"
+                                app:chipBackgroundColor="@color/cardview_dark_background"
+                                app:chipStrokeColor="#00E676"
+                                app:chipStrokeWidth="1dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipNext"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="⏭ Next"
+                                android:textColor="#ECEFF1"
+                                app:chipBackgroundColor="@color/cardview_dark_background"
+                                app:chipStrokeColor="#00E5FF"
+                                app:chipStrokeWidth="1dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipPrev"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="⏮ Prev"
+                                android:textColor="#ECEFF1"
+                                app:chipBackgroundColor="@color/cardview_dark_background"
+                                app:chipStrokeColor="#00E5FF"
+                                app:chipStrokeWidth="1dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipVolUp"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🔊 Vol +"
+                                android:textColor="#ECEFF1"
+                                app:chipBackgroundColor="@color/cardview_dark_background"
+                                app:chipStrokeColor="#2979FF"
+                                app:chipStrokeWidth="1dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipVolDown"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🔉 Vol -"
+                                android:textColor="#ECEFF1"
+                                app:chipBackgroundColor="@color/cardview_dark_background"
+                                app:chipStrokeColor="#2979FF"
+                                app:chipStrokeWidth="1dp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipIdle"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🤫 Noise/Rest"
+                                android:textColor="#ECEFF1"
+                                app:chipBackgroundColor="@color/cardview_dark_background"
+                                app:chipStrokeColor="#FFD54F"
+                                app:chipStrokeWidth="1dp" />
+                        </com.google.android.material.chip.ChipGroup>
+                    </HorizontalScrollView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- STEP 2: RECORDING CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <!-- Duration selector row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="10dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/step2_title"
+                            android:textColor="#00E676"
+                            android:textSize="11sp"
+                            android:fontFamily="sans-serif-medium"
+                            android:letterSpacing="0.06"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/step2_duration"
+                            android:textColor="#90A4AE"
+                            android:textSize="11sp"
+                            android:layout_marginEnd="6dp" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chipGroupDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true">
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipDur5"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="5s"
+                                android:textColor="#ECEFF1"
+                                android:textSize="10sp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipDur7"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:text="7s"
+                                android:textColor="#ECEFF1"
+                                android:textSize="10sp" />
+
+                            <com.google.android.material.chip.Chip
+                                android:id="@+id/chipDur10"
+                                style="@style/Widget.MaterialComponents.Chip.Choice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="10s"
+                                android:textColor="#ECEFF1"
+                                android:textSize="10sp" />
+                        </com.google.android.material.chip.ChipGroup>
+                    </LinearLayout>
+
+                    <!-- Big Record Action Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnRecordGesture"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:text="@string/step2_btn_record"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        app:backgroundTint="#D32F2F"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_record"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="#FFFFFF" />
+
+                    <!-- Live Recording HUD Box -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:cardBackgroundColor="#171F2C"
+                        app:cardCornerRadius="10dp"
+                        app:strokeColor="#253246"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/txtRecordStatus"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="@string/step2_ready"
+                                    android:textColor="#ECEFF1"
+                                    android:textSize="13sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtRecordCountdown"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0.0s / 7.0s"
+                                    android:textColor="#00E5FF"
+                                    android:textSize="12sp"
+                                    android:fontFamily="monospace"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <ProgressBar
+                                android:id="@+id/pbRecordProgress"
+                                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:progressDrawable="@drawable/pb_accel_track"
+                                android:max="100"
+                                android:progress="0" />
+
+                            <!-- Live metrics row -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/txtRecordSamplesCount"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Próbki: 0"
+                                    android:textColor="#78909C"
+                                    android:textSize="11sp" />
+
+                                <TextView
+                                    android:id="@+id/txtRecordLivePeakG"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="12dp"
+                                    android:text="Max: 0.00 G"
+                                    android:textColor="#00E676"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/txtRecordLivePeakGyro"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Gyro: 0 °/s"
+                                    android:textColor="#00E5FF"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/step2_recording_hint"
+                        android:textColor="#FFD54F"
+                        android:textSize="11sp"
+                        android:gravity="center_horizontal" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- STEP 3: RECORDED GESTURES LIST & INDIVIDUAL DELETION -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="14dp">
+
+                <!-- Header row with counts and actions -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="18dp"
+                    android:layout_marginBottom="6dp">
+
+                    <TextView
+                        android:id="@+id/txtRecordedGesturesHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="3. ZAPISANE GESTY (0)"
+                        android:textColor="#00E5FF"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:letterSpacing="0.06"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical|end"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnRestorePresets"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:minWidth="0dp"
+                            android:paddingHorizontal="6dp"
+                            android:text="@string/btn_restore_defaults"
+                            android:textColor="#80DEEA"
+                            android:textSize="11sp"
+                            app:icon="@drawable/ic_restore"
+                            app:iconSize="14dp"
+                            app:iconTint="#80DEEA" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnClearAllGestures"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:minWidth="0dp"
+                            android:layout_marginStart="6dp"
+                            android:paddingHorizontal="6dp"
+                            android:text="@string/btn_delete_all"
+                            android:textColor="#FF5252"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Empty State TextView -->
+                <TextView
+                    android:id="@+id/txtEmptyGesturesList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="24dp"
+                    android:text="@string/no_recorded_gestures"
+                    android:textColor="#607D8B"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
+                <!-- RecyclerView for Individual Recorded Gestures -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerRecordedGestures"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

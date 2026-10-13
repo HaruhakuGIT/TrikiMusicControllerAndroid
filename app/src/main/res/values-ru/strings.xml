@@ -49,6 +49,35 @@
     <string name="device_scan">Поиск</string>
     <string name="device_scanning">Ищу Triki...</string>
     <string name="no_saved_devices">Нет сохранённых устройств.\nНажмите «Поиск», чтобы найти ваши Triki.</string>
-    <string name="device_connected_prefix">Подключено: %1$s</string>
     <string name="btn_close">Закрыть</string>
+
+    <!-- Студия программирования жестов -->
+    <string name="btn_gesture_studio">Обучение жестов</string>
+    <string name="studio_title">Студия Обучения Жестов</string>
+    <string name="studio_subtitle">Записывайте свои жесты и удаляйте отдельные образцы</string>
+    <string name="step1_title">1. ВЫБЕРИТЕ ДЕЙСТВИЕ ДЛЯ ОБУЧЕНИЯ</string>
+    <string name="step2_title">2. СЕССИЯ ЗАПИСИ</string>
+    <string name="step2_duration">Длительность:</string>
+    <string name="step2_dur5">5 сек</string>
+    <string name="step2_dur7">7 сек</string>
+    <string name="step2_dur10">10 сек</string>
+    <string name="step2_btn_record">НАЧАТЬ ЗАПИСЬ</string>
+    <string name="step2_btn_recording">ИДЁТ ЗАПИСЬ...</string>
+    <string name="step2_countdown">Приготовьтесь: %1$d с</string>
+    <string name="step2_recording_hint">Зажмите кнопку Triki и повторите жест 3–5 раз!</string>
+    <string name="step2_ready">Готов к записи</string>
+    <string name="step2_completed">Готово! Распознано и сохранено повторений: %1$d</string>
+    <string name="step2_no_data">Нет данных BLE во время записи. Проверьте подключение.</string>
+    <string name="step3_title">3. СОХРАНЁННЫЕ ЖЕСТЫ (%1$d)</string>
+    <string name="btn_restore_defaults">Сбросить к исходным</string>
+    <string name="btn_delete_confirm_title">Удалить этот жест?</string>
+    <string name="btn_delete_confirm_msg">Этот файл жеста будет удалён, а модель распознавания переобучена.</string>
+    <string name="btn_delete_confirm_ok">Удалить</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_delete_all">Удалить все</string>
+    <string name="btn_delete_all_confirm_msg">Вы уверены, что хотите удалить все сохранённые жесты?</string>
+    <string name="no_recorded_gestures">Нет сохранённых жестов.\nВыберите действие выше и запишите свой первый жест!</string>
+    <string name="action_idle">Покой / Шум руки</string>
+    <string name="gesture_deleted_toast">Жест удалён. Модель переобучена.</string>
+    <string name="gesture_saved_toast">Сохранено новых жестов: %1$d! Модель обновлена.</string>
 </resources>

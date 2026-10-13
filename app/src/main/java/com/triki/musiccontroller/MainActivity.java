@@ -50,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
             if (batt > 0) {
                 binding.txtBattery.setText("🔋 " + batt + "%");
             }
+
+            if (service.getGestureEngine() != null) {
+                binding.txtTrainedCount.setText(getString(R.string.trained_models, service.getGestureEngine().getProfileCount()));
+            }
         }
 
         @Override
@@ -98,6 +102,20 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
             }
         });
 
+        binding.btnOpenGestureStudio.setOnClickListener(v -> {
+            if (isBound && service != null) {
+                showGestureStudio();
+            } else {
+                checkPermissionsAndStart();
+            }
+        });
+
+        binding.txtTrainedCount.setOnClickListener(v -> {
+            if (isBound && service != null) {
+                showGestureStudio();
+            }
+        });
+
         binding.btnConnect.setOnClickListener(v -> {
             if (isBound && service != null) {
                 service.toggleConnect();
@@ -107,9 +125,40 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
         });
 
         checkPermissionsAndStart();
+
+        handleIncomingIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIncomingIntent(intent);
+    }
+
+    private void handleIncomingIntent(Intent intent) {
+        if (intent != null && intent.getBooleanExtra("OPEN_STUDIO", false)) {
+            binding.getRoot().postDelayed(() -> {
+                if (isBound && service != null) {
+                    showGestureStudio();
+                } else {
+                    binding.getRoot().postDelayed(this::showGestureStudio, 600);
+                }
+            }, 300);
+        }
     }
 
     private DeviceManagerBottomSheet deviceManagerSheet;
+    private GestureStudioBottomSheet gestureStudioSheet;
+
+    private void showGestureStudio() {
+        if (service == null) return;
+        gestureStudioSheet = new GestureStudioBottomSheet(this, service.getGestureEngine(), service.getBleManager(),
+                (totalGestures, trainedActions) -> {
+                    binding.txtTrainedCount.setText(getString(R.string.trained_models, trainedActions));
+                });
+        gestureStudioSheet.show();
+    }
 
     private void showDeviceManager() {
         if (service == null) return;
@@ -243,6 +292,10 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
 
     @Override
     public void onSampleReceived(ImuSample sample) {
+        if (gestureStudioSheet != null) {
+            gestureStudioSheet.onSampleReceived(sample);
+        }
+
         double aMag = sample.getAccelMagnitude();
         double gMag = sample.getGyroMagnitude();
 
@@ -320,6 +373,16 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
                     targetCard = binding.cardPrev;
                     glowColor = Color.parseColor("#00E5FF");
                     binding.txtPrevConf.setText(String.format("%.0f%%", confidence * 100));
+                    break;
+                case VOLUME_UP:
+                    targetCard = binding.cardVolUp;
+                    glowColor = Color.parseColor("#2979FF");
+                    binding.txtVolUpConf.setText(String.format("%.0f%%", confidence * 100));
+                    break;
+                case VOLUME_DOWN:
+                    targetCard = binding.cardVolDown;
+                    glowColor = Color.parseColor("#2979FF");
+                    binding.txtVolDownConf.setText(String.format("%.0f%%", confidence * 100));
                     break;
             }
 

@@ -220,6 +220,26 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- GESTURE STUDIO ACTION BUTTON -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnOpenGestureStudio"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/btn_gesture_studio"
+                    android:textColor="#00E5FF"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_gesture_studio"
+                    app:iconTint="#00E5FF"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    app:strokeColor="#00E5FF"
+                    app:strokeWidth="1.2dp" />
+
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -356,6 +376,98 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </GridLayout>
+
+        <!-- VOLUME ACTION TILES -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
+
+            <!-- VOL DOWN -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardVolDown"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔉"
+                        android:textSize="22sp"
+                        android:textColor="#2979FF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_vol_down"
+                        android:textColor="#ECEFF1"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"/>
+                    <TextView
+                        android:id="@+id/txtVolDownConf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--%"
+                        android:textColor="#546E7A"
+                        android:textSize="10sp"
+                        android:layout_marginTop="1dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- VOL UP -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardVolUp"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                app:cardBackgroundColor="#131824"
+                app:cardCornerRadius="14dp"
+                app:strokeColor="#202838"
+                app:strokeWidth="1.2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="6dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔊"
+                        android:textSize="22sp"
+                        android:textColor="#2979FF"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_vol_up"
+                        android:textColor="#ECEFF1"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"/>
+                    <TextView
+                        android:id="@+id/txtVolUpConf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--%"
+                        android:textColor="#546E7A"
+                        android:textSize="10sp"
+                        android:layout_marginTop="1dp"/>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
 
         <!-- LIVE TELEMETRY SENSORS (HUD CARD) -->
         <com.google.android.material.card.MaterialCardView

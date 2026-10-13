@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="4dp"
+    app:cardBackgroundColor="#151C28"
+    app:cardCornerRadius="14dp"
+    app:strokeColor="#243044"
+    app:strokeWidth="1.2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <!-- Action Icon Badge -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardActionIcon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:cardBackgroundColor="#1A2738"
+            app:cardCornerRadius="10dp"
+            app:strokeColor="#00E5FF"
+            app:strokeWidth="1dp">
+
+            <TextView
+                android:id="@+id/txtGestureIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                tools:text="⏭" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Details Column -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtGestureActionName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                tools:text="Następny utwór" />
+
+            <TextView
+                android:id="@+id/txtGestureDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="#78909C"
+                android:textSize="10sp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:ellipsize="middle"
+                android:fontFamily="monospace"
+                tools:text="NextTrack_20261012_193144.json" />
+
+            <!-- Metric Pills Row -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtPillAccel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#1B2B28"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="#00E676"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:text="2.15 G" />
+
+                <TextView
+                    android:id="@+id/txtPillGyro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#162934"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="#00E5FF"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    tools:text="180 °/s" />
+
+                <TextView
+                    android:id="@+id/txtPillDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#202636"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:textColor="#B0BEC5"
+                    android:textSize="10sp"
+                    tools:text="320 ms" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Individual Delete Trash Button -->
+        <ImageButton
+            android:id="@+id/btnDeleteGesture"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Delete gesture"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete"
+            app:tint="#FF5252" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

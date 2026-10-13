@@ -51,4 +51,34 @@
     <string name="no_saved_devices">No saved Triki devices yet.\nClick Scan to find your Triki.</string>
     <string name="device_connected_prefix">Connected to: %1$s</string>
     <string name="btn_close">Close</string>
+
+    <!-- Gesture Studio -->
+    <string name="btn_gesture_studio">Gesture Studio</string>
+    <string name="studio_title">Gesture Training Studio</string>
+    <string name="studio_subtitle">Record custom gestures &amp; manage individual samples</string>
+    <string name="step1_title">1. CHOOSE ACTION TO TRAIN</string>
+    <string name="step2_title">2. RECORDING SESSION</string>
+    <string name="step2_duration">Duration:</string>
+    <string name="step2_dur5">5 sec</string>
+    <string name="step2_dur7">7 sec</string>
+    <string name="step2_dur10">10 sec</string>
+    <string name="step2_btn_record">START RECORDING</string>
+    <string name="step2_btn_recording">RECORDING...</string>
+    <string name="step2_countdown">Get ready in: %1$d s</string>
+    <string name="step2_recording_hint">Hold Triki button and repeat gesture 3–5 times!</string>
+    <string name="step2_ready">Ready to record</string>
+    <string name="step2_completed">Finished! Detected &amp; saved %1$d repetitions</string>
+    <string name="step2_no_data">No BLE data received during recording. Check connection.</string>
+    <string name="step3_title">3. RECORDED GESTURES (%1$d)</string>
+    <string name="btn_restore_defaults">Restore Presets</string>
+    <string name="btn_delete_confirm_title">Delete Gesture?</string>
+    <string name="btn_delete_confirm_msg">This gesture file will be permanently deleted and the model will retrain.</string>
+    <string name="btn_delete_confirm_ok">Delete</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_delete_all">Clear All</string>
+    <string name="btn_delete_all_confirm_msg">Are you sure you want to delete all saved gestures?</string>
+    <string name="no_recorded_gestures">No gestures saved yet.\nSelect an action above and record your first gesture!</string>
+    <string name="action_idle">Rest / Hand Noise</string>
+    <string name="gesture_deleted_toast">Gesture deleted. Model re-trained.</string>
+    <string name="gesture_saved_toast">Saved %1$d new gestures! Model updated.</string>
 </resources>
