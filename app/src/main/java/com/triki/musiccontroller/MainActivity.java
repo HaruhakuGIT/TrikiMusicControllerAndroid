@@ -349,9 +349,7 @@ public class MainActivity extends AppCompatActivity implements TrikiForegroundSe
     public void onButtonStateChanged(boolean isPressed) {
         runOnUiThread(() -> {
             if (gestureStudioSheet != null && gestureStudioSheet.isShowing()) {
-                if (isPressed) {
-                    gestureStudioSheet.onTrikiButtonClicked();
-                }
+                gestureStudioSheet.onTrikiButtonStateChanged(isPressed);
                 return;
             }
 

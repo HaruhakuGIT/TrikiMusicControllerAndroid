@@ -28,6 +28,15 @@ public class RecordedGesture {
     @SerializedName("PeakGyroDegPerSec")
     public double peakGyroDegPerSec;
 
+    @SerializedName("PeakGyroX")
+    public double peakGyroX;
+
+    @SerializedName("PeakGyroY")
+    public double peakGyroY;
+
+    @SerializedName("PeakGyroZ")
+    public double peakGyroZ;
+
     @SerializedName("DominantGyroZ")
     public double dominantGyroZ;
 
@@ -102,6 +111,7 @@ public class RecordedGesture {
         double maxGyro = 0;
         double pDirX = 0, pDirY = 0, pDirZ = 0;
         double sumGx = 0, sumGy = 0, sumGz = 0;
+        double pGx = 0, pGy = 0, pGz = 0;
 
         int restCount = Math.min(10, Math.max(3, samples.size() / 4));
         double restAx = 0, restAy = 0, restAz = 0;
@@ -129,6 +139,9 @@ public class RecordedGesture {
 
             if (gMag > maxGyro) {
                 maxGyro = gMag;
+                pGx = s.gyroX;
+                pGy = s.gyroY;
+                pGz = s.gyroZ;
             }
 
             sumGx += Math.abs(s.gyroX);
@@ -143,6 +156,9 @@ public class RecordedGesture {
 
         g.peakAccelG = maxAccel;
         g.peakGyroDegPerSec = maxGyro;
+        g.peakGyroX = pGx;
+        g.peakGyroY = pGy;
+        g.peakGyroZ = pGz;
         g.dominantGyroX = sumGx / totalSum;
         g.dominantGyroY = sumGy / totalSum;
         g.dominantGyroZ = sumGz / totalSum;
@@ -166,6 +182,19 @@ public class RecordedGesture {
         }
         double mag = best.totalAccel + 0.0001;
         return new double[]{best.accelX / mag, best.accelY / mag, best.accelZ / mag};
+    }
+
+    public double[] getPeakGyroVector() {
+        if (Math.abs(peakGyroX) > 0.001 || Math.abs(peakGyroY) > 0.001 || Math.abs(peakGyroZ) > 0.001) {
+            return new double[]{peakGyroX, peakGyroY, peakGyroZ};
+        }
+        if (points == null || points.isEmpty()) return new double[]{0, 0, 0};
+
+        GesturePoint best = points.get(0);
+        for (GesturePoint pt : points) {
+            if (pt.totalGyro > best.totalGyro) best = pt;
+        }
+        return new double[]{best.gyroX, best.gyroY, best.gyroZ};
     }
 
     public double[] getRestOrientation() {

@@ -11,8 +11,10 @@ public class GestureProfile {
     public double avgPeakGyro;
     public double avgDurationMs;
 
-    // Normalized Direction Vector of Peak Impact/Motion
+    // Normalized Direction Vector of Peak Impact/Motion (Linear Acceleration)
     public double dirX, dirY, dirZ;
+    // Normalized Direction Vector of Peak Angular Velocity (Gyroscope Rotation)
+    public double gyroDirX, gyroDirY, gyroDirZ;
     // Normalized Rest Orientation Vector of Triki in hand
     public double restDirX, restDirY, restDirZ;
 
@@ -21,6 +23,13 @@ public class GestureProfile {
         double dirMag = Math.sqrt(dirX * dirX + dirY * dirY + dirZ * dirZ);
         if (mag < 0.001 || dirMag < 0.001) return 0.0;
         return (ax * dirX + ay * dirY + az * dirZ) / (mag * dirMag);
+    }
+
+    public double computeGyroCosine(double gx, double gy, double gz) {
+        double mag = Math.sqrt(gx * gx + gy * gy + gz * gz);
+        double gDirMag = Math.sqrt(gyroDirX * gyroDirX + gyroDirY * gyroDirY + gyroDirZ * gyroDirZ);
+        if (mag < 0.001 || gDirMag < 0.001) return 0.0;
+        return (gx * gyroDirX + gy * gyroDirY + gz * gyroDirZ) / (mag * gDirMag);
     }
 
     public double computeRestOrientationCosine(double rx, double ry, double rz) {

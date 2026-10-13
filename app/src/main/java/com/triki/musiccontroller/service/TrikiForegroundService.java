@@ -126,8 +126,11 @@ public class TrikiForegroundService extends Service {
 
                 if (isVolumeModeActive) {
                     processVolumeMotion(sample);
-                } else if (isButtonPressed) {
-                    gestureEngine.processSample(sample);
+                } else {
+                    gestureEngine.updateRestOrientation(sample);
+                    if (isButtonPressed) {
+                        gestureEngine.processSample(sample);
+                    }
                 }
 
                 if (serviceCallback != null) {
@@ -339,6 +342,7 @@ public class TrikiForegroundService extends Service {
 
     private void handleGestureAction(MusicAction action, String name, float confidence) {
         vibrateFeedback(40);
+        gestureTriggeredDuringHold = true;
         switch (action) {
             case PLAY_PAUSE:
                 mediaController.playPause();

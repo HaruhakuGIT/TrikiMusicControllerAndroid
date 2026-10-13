@@ -93,14 +93,35 @@ public class GestureStudioBottomSheet {
         return dialog != null && dialog.isShowing();
     }
 
-    public void onTrikiButtonClicked() {
+    private long trikiButtonPressTime = 0;
+
+    public void onTrikiButtonStateChanged(boolean isPressed) {
         handler.post(() -> {
-            if (currentState == StudioState.IDLE) {
-                startCountdown();
+            if (isPressed) {
+                trikiButtonPressTime = System.currentTimeMillis();
+                if (currentState == StudioState.IDLE) {
+                    // Physical button on Triki starts recording IMMEDIATELY! Zero delay!
+                    startRecording();
+                } else if (currentState == StudioState.COUNTDOWN) {
+                    // Skip remaining countdown immediately and start recording
+                    handler.removeCallbacks(countdownRunnable);
+                    startRecording();
+                } else if (currentState == StudioState.RECORDING) {
+                    // Tap while recording -> finish recording immediately
+                    finishRecording();
+                }
             } else {
-                stopSessionIfRunning();
+                long duration = System.currentTimeMillis() - trikiButtonPressTime;
+                if (currentState == StudioState.RECORDING && duration >= 350) {
+                    // Released after holding button -> finish recording immediately
+                    finishRecording();
+                }
             }
         });
+    }
+
+    public void onTrikiButtonClicked() {
+        onTrikiButtonStateChanged(true);
     }
 
     public void show() {
